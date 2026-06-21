@@ -1,0 +1,1123 @@
+<!DOCTYPE html>
+<html lang="pl">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>AI Chatbot — Szablon | WdoAI AG 2025/2026</title>
+
+  <!-- ============================================================
+       POZ_App_Template.html  v2.0
+       Szablon chatbota AI — Kurs "Wprowadzenie do Sztucznej Inteligencji"
+       Akademia Górnośląska | Digital Mentors Hub | 2025/2026
+       Prowadzący: Damian Skipioł
+
+       OBSŁUGIWANE PLATFORMY AI:
+         • OpenAI  — GPT-4o, GPT-4o Mini, GPT-3.5 Turbo
+         • Google  — Gemini 2.0 Flash, 1.5 Pro/Flash
+         • Anthropic — Claude Sonnet 4.6, Opus 4.6, Haiku 4.5
+         • xAI     — Grok-2, Grok-2 Mini
+
+       INSTRUKCJA DLA STUDENTA:
+       1. Otwórz ten plik w przeglądarce (Chrome / Edge)
+       2. Kliknij "⚙️ Konfiguracja" → wybierz platformę AI
+       3. Wklej klucz API wybranej platformy
+       4. Wklej swój System Prompt (wersja z Lab 1)
+       5. Zmień nazwę, emoji i kolory chatbota
+       6. Zrób screenshoty działającej aplikacji
+       7. BONUS: wdróż na GitHub Pages lub Netlify
+       ============================================================ -->
+
+  <style>
+    /* ===== DOSTOSUJ TUTAJ — zmień kolory i styl swojego chatbota ===== */
+    :root {
+      --brand-primary:   #1B2A4A;   /* ← ZMIEŃ: kolor główny Twojej marki  */
+      --brand-secondary: #2E74B5;   /* ← ZMIEŃ: kolor dodatkowy             */
+      --brand-accent:    #7030A0;   /* ← ZMIEŃ: kolor akcentu               */
+      --brand-bg:        #F4F7FB;   /* ← ZMIEŃ: tło aplikacji               */
+      --brand-chat-user: #E8F0FE;   /* ← ZMIEŃ: tło bąbelka użytkownika     */
+      --brand-chat-bot:  #FFFFFF;   /* ← ZMIEŃ: tło bąbelka chatbota        */
+      --font-main:       'Segoe UI', Arial, sans-serif;
+    }
+    /* ================================================================ */
+
+    * { box-sizing: border-box; margin: 0; padding: 0; }
+    body {
+      font-family: var(--font-main);
+      background: var(--brand-bg);
+      height: 100vh;
+      display: flex;
+      flex-direction: column;
+    }
+
+    /* ---------- HEADER ---------- */
+    #app-header {
+      background: var(--brand-primary);
+      color: #fff;
+      padding: 12px 18px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      box-shadow: 0 2px 8px rgba(0,0,0,0.18);
+      flex-shrink: 0;
+    }
+    #header-left { display: flex; align-items: center; gap: 12px; }
+    #bot-avatar {
+      width: 42px; height: 42px;
+      background: var(--brand-secondary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 22px;
+      border: 2px solid rgba(255,255,255,0.3);
+      flex-shrink: 0;
+    }
+    #bot-name    { font-size: 1.1rem; font-weight: 700; }
+    #bot-tagline { font-size: 0.73rem; opacity: 0.75; margin-top: 2px; display: flex; align-items: center; gap: 6px; }
+    #status-dot  { width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; animation: pulse 2s infinite; display: inline-block; }
+    @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
+
+    /* Platform badge in header */
+    #platform-badge {
+      font-size: 0.68rem;
+      padding: 2px 9px;
+      border-radius: 10px;
+      font-weight: 600;
+      letter-spacing: 0.03em;
+      text-transform: uppercase;
+      flex-shrink: 0;
+    }
+    .badge-openai   { background: #10a37f22; color: #10a37f; border: 1px solid #10a37f55; }
+    .badge-gemini   { background: #4285F422; color: #4285F4; border: 1px solid #4285F455; }
+    .badge-claude   { background: #CC785C22; color: #CC785C; border: 1px solid #CC785C55; }
+    .badge-grok     { background: #FFFFFF22; color: #fff;    border: 1px solid #ffffff55; }
+
+    #header-right { display: flex; gap: 8px; align-items: center; }
+    .header-btn {
+      background: rgba(255,255,255,0.12);
+      border: 1px solid rgba(255,255,255,0.25);
+      color: #fff;
+      padding: 6px 13px;
+      border-radius: 20px;
+      cursor: pointer;
+      font-size: 0.8rem;
+      font-weight: 500;
+      transition: background 0.2s;
+    }
+    .header-btn:hover { background: rgba(255,255,255,0.22); }
+
+    /* ---------- WARNINGS / BANNERS ---------- */
+    .info-banner {
+      padding: 10px 18px;
+      font-size: 0.84rem;
+      font-weight: 500;
+      display: none;
+      flex-shrink: 0;
+      align-items: center;
+      gap: 8px;
+    }
+    .info-banner.show { display: flex; }
+    #api-warning  { background: #FFF3CD; color: #856404; border-bottom: 1px solid #FECB02; }
+    #cors-warning { background: #FDE8E8; color: #7B2120; border-bottom: 1px solid #F5C6C6; }
+
+    /* ---------- CHAT WINDOW ---------- */
+    #chat-container {
+      flex: 1;
+      overflow-y: auto;
+      padding: 18px;
+      display: flex;
+      flex-direction: column;
+      gap: 12px;
+      scroll-behavior: smooth;
+    }
+
+    /* ---------- MESSAGE BUBBLES ---------- */
+    .message {
+      display: flex;
+      gap: 9px;
+      max-width: 82%;
+      animation: fadeIn 0.22s ease;
+    }
+    @keyframes fadeIn { from{opacity:0;transform:translateY(5px)} to{opacity:1;transform:none} }
+    .message.user { align-self: flex-end; flex-direction: row-reverse; }
+    .message.bot  { align-self: flex-start; }
+
+    .msg-avatar {
+      width: 33px; height: 33px;
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 15px;
+      flex-shrink: 0;
+      margin-top: 2px;
+    }
+    .bot  .msg-avatar { background: var(--brand-primary); }
+    .user .msg-avatar { background: var(--brand-secondary); }
+
+    .msg-bubble {
+      padding: 11px 15px;
+      border-radius: 18px;
+      font-size: 0.91rem;
+      line-height: 1.55;
+      box-shadow: 0 1px 3px rgba(0,0,0,0.07);
+    }
+    .bot  .msg-bubble { background: var(--brand-chat-bot); border: 1px solid #E0E6F0; border-bottom-left-radius: 4px; color: #1A1A2E; }
+    .user .msg-bubble { background: var(--brand-chat-user); border-bottom-right-radius: 4px; color: #1A1A2E; }
+
+    .msg-time { font-size: 0.67rem; color: #AAA; margin-top: 3px; }
+    .user .msg-time { text-align: left; }
+    .bot  .msg-time { text-align: right; }
+
+    /* ---------- TYPING INDICATOR ---------- */
+    #typing-indicator { display: none; align-self: flex-start; align-items: center; gap: 9px; }
+    #typing-indicator.show { display: flex; }
+    .typing-dots { background:#fff; border:1px solid #E0E6F0; padding:11px 16px; border-radius:18px; border-bottom-left-radius:4px; display:flex; gap:4px; align-items:center; }
+    .dot { width:7px; height:7px; background:var(--brand-secondary); border-radius:50%; animation:bounce 1.2s infinite; }
+    .dot:nth-child(2){animation-delay:0.2s} .dot:nth-child(3){animation-delay:0.4s}
+    @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
+
+    /* ---------- INPUT AREA ---------- */
+    #input-area {
+      background: #fff;
+      border-top: 1px solid #DDE3ED;
+      padding: 12px 18px;
+      display: flex;
+      gap: 9px;
+      align-items: flex-end;
+      flex-shrink: 0;
+    }
+    #user-input {
+      flex: 1;
+      border: 1.5px solid #CDD5E0;
+      border-radius: 22px;
+      padding: 10px 17px;
+      font-size: 0.91rem;
+      font-family: var(--font-main);
+      resize: none;
+      outline: none;
+      max-height: 120px;
+      overflow-y: auto;
+      transition: border-color 0.2s;
+      line-height: 1.4;
+    }
+    #user-input:focus { border-color: var(--brand-secondary); }
+    #send-btn {
+      background: var(--brand-primary);
+      color: #fff;
+      border: none;
+      border-radius: 50%;
+      width: 43px; height: 43px;
+      cursor: pointer;
+      font-size: 19px;
+      display: flex; align-items: center; justify-content: center;
+      transition: background 0.2s, transform 0.1s;
+      flex-shrink: 0;
+    }
+    #send-btn:hover { background: var(--brand-secondary); }
+    #send-btn:active { transform: scale(0.92); }
+    #send-btn:disabled { background: #CCC; cursor: not-allowed; }
+
+    /* ---------- SUGGESTIONS ---------- */
+    #suggestions { display: flex; gap: 7px; flex-wrap: wrap; padding: 0 18px 10px; background: #fff; }
+    .suggestion-chip {
+      background: var(--brand-bg);
+      border: 1px solid #CDD5E0;
+      padding: 6px 13px;
+      border-radius: 16px;
+      font-size: 0.77rem;
+      cursor: pointer;
+      color: var(--brand-primary);
+      transition: all 0.18s;
+      white-space: nowrap;
+    }
+    .suggestion-chip:hover { background: var(--brand-secondary); color: #fff; border-color: var(--brand-secondary); }
+
+    /* ---------- CONFIG MODAL ---------- */
+    #config-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.5);
+      z-index: 100;
+      align-items: center;
+      justify-content: center;
+    }
+    #config-overlay.show { display: flex; }
+    #config-panel {
+      background: #fff;
+      border-radius: 16px;
+      padding: 28px;
+      width: 580px;
+      max-width: 96vw;
+      max-height: 90vh;
+      overflow-y: auto;
+      box-shadow: 0 20px 60px rgba(0,0,0,0.22);
+    }
+    #config-panel h2 { color: var(--brand-primary); margin-bottom: 6px; font-size: 1.15rem; }
+    .config-section-title {
+      font-size: 0.78rem;
+      font-weight: 700;
+      color: var(--brand-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-top: 22px;
+      margin-bottom: 10px;
+      padding-bottom: 5px;
+      border-bottom: 2px solid #E8F0FE;
+    }
+    .config-label { font-size: 0.81rem; font-weight: 600; color: #555; margin-bottom: 5px; display: block; margin-top: 12px; }
+    .config-input, .config-textarea, .config-select {
+      width: 100%;
+      border: 1.5px solid #DDE3ED;
+      border-radius: 10px;
+      padding: 9px 13px;
+      font-size: 0.88rem;
+      font-family: var(--font-main);
+      outline: none;
+      transition: border-color 0.2s;
+      background: #fff;
+    }
+    .config-input:focus, .config-textarea:focus, .config-select:focus { border-color: var(--brand-secondary); }
+    .config-textarea { resize: vertical; min-height: 130px; line-height: 1.5; }
+    .config-hint { font-size: 0.73rem; color: #888; margin-top: 4px; line-height: 1.45; }
+    .config-hint a { color: var(--brand-secondary); }
+
+    /* Platform selector cards */
+    #platform-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
+    .platform-card {
+      border: 2px solid #DDE3ED;
+      border-radius: 10px;
+      padding: 10px 12px;
+      cursor: pointer;
+      transition: all 0.18s;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+    }
+    .platform-card:hover { border-color: var(--brand-secondary); background: #F0F6FF; }
+    .platform-card.selected { border-color: var(--brand-secondary); background: #E8F0FE; }
+    .platform-card .p-logo { font-size: 22px; flex-shrink: 0; }
+    .platform-card .p-info { min-width: 0; }
+    .platform-card .p-name { font-weight: 700; font-size: 0.88rem; color: #1A1A2E; }
+    .platform-card .p-desc { font-size: 0.7rem; color: #888; margin-top: 1px; }
+
+    /* CORS alert inside config */
+    #cors-alert {
+      background: #FDE8E8;
+      border: 1px solid #F5C6C6;
+      border-radius: 8px;
+      padding: 10px 13px;
+      font-size: 0.8rem;
+      color: #7B2120;
+      margin-top: 10px;
+      display: none;
+    }
+    #cors-alert.show { display: block; }
+
+    .config-actions { display: flex; gap: 10px; margin-top: 22px; justify-content: flex-end; }
+    .btn-save { background: var(--brand-primary); color: #fff; border: none; padding: 10px 22px; border-radius: 10px; cursor: pointer; font-weight: 600; font-size: 0.88rem; }
+    .btn-save:hover { background: var(--brand-secondary); }
+    .btn-cancel { background: #f0f0f0; color: #555; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem; }
+
+    /* ---------- DYNAMIC FOLLOW-UP CHIPS ---------- */
+    #dynamic-chips {
+      display: none;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 18px 10px;
+      background: #fff;
+      border-top: 1px dashed #D0DCF0;
+      flex-shrink: 0;
+      animation: fadeIn 0.25s ease;
+    }
+    #dynamic-chips-label {
+      width: 100%;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #AAA;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+    .dynamic-chip {
+      background: linear-gradient(135deg, #f4f8ff, #e8f0fe);
+      border: 1px solid var(--brand-secondary);
+      padding: 5px 13px;
+      border-radius: 16px;
+      font-size: 0.77rem;
+      cursor: pointer;
+      color: var(--brand-primary);
+      transition: all 0.18s;
+      white-space: nowrap;
+      opacity: 0.9;
+    }
+    .dynamic-chip:hover { background: var(--brand-secondary); color: #fff; border-color: var(--brand-secondary); opacity: 1; }
+
+    /* ---------- FOOTER ---------- */
+    #footer-badge { text-align: center; font-size: 0.67rem; color: #BBB; padding: 5px; background: #fff; border-top: 1px solid #EEE; flex-shrink: 0; }
+
+    @media (max-width: 480px) {
+      .message { max-width: 95%; }
+      #config-panel { padding: 18px; }
+      #platform-cards { grid-template-columns: 1fr; }
+    }
+  </style>
+</head>
+<body>
+
+<!-- ========== HEADER ========== -->
+<div id="app-header">
+  <div id="header-left">
+    <div id="bot-avatar">🤖</div>
+    <div>
+      <div id="bot-name">Asystent AI</div>
+      <div id="bot-tagline">
+        <span id="status-dot"></span>
+        <span id="tagline-text">Dostępny 24/7</span>
+        <span id="platform-badge" class="badge-openai">OpenAI</span>
+      </div>
+    </div>
+  </div>
+  <div id="header-right">
+    <button class="header-btn" onclick="clearChat()">🗑️ Wyczyść</button>
+    <button class="header-btn" onclick="openConfig()">⚙️ Konfiguracja</button>
+  </div>
+</div>
+
+<!-- ========== BANNERS ========== -->
+<div id="api-warning" class="info-banner show">
+  ⚠️ <strong>Brak klucza API.</strong>&nbsp; Kliknij <strong>⚙️ Konfiguracja</strong>, wybierz platformę AI i wklej swój klucz, aby uruchomić chatbota.
+</div>
+<div id="cors-warning" class="info-banner">
+  🔒 <strong>Uwaga (Claude / Grok):</strong>&nbsp; Anthropic i xAI mogą blokować zapytania z przeglądarki (CORS). Jeśli chatbot nie odpowiada, skorzystaj z OpenAI lub Gemini.
+</div>
+
+<!-- ========== CHAT WINDOW ========== -->
+<div id="chat-container"></div>
+<div id="typing-indicator">
+  <div class="msg-avatar" style="background:var(--brand-primary);width:33px;height:33px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">🤖</div>
+  <div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
+</div>
+
+<!-- ========== DYNAMIC FOLLOW-UP CHIPS ========== -->
+<div id="dynamic-chips">
+  <div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>
+</div>
+
+<!-- ========== SUGGESTIONS ========== -->
+<div id="suggestions">
+  <!-- ↓ ZMIEŃ: pytania przykładowe dla Twojej branży -->
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jak mogę umówić wizytę?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jakie dokumenty muszę przynieść?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jakie są godziny otwarcia?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Czym się zajmujecie?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Przetłumacz tytuł artykułu na polski</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Przetłumacz tytuł artykułu na angielski</div>
+</div>
+
+<!-- ========== INPUT AREA ========== -->
+<div id="input-area">
+  <textarea id="user-input" rows="1" placeholder="Napisz wiadomość..."
+    onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
+  <button id="send-btn" onclick="sendMessage()" title="Wyślij">➤</button>
+</div>
+
+<!-- ========== FOOTER ========== -->
+<div id="footer-badge">WdoAI · Akademia Górnośląska 2025/2026 · POZ_App_Template v2.0 · obsługiwane platformy: OpenAI · Gemini · Claude · Grok</div>
+
+<!-- ========== CONFIG MODAL ========== -->
+<div id="config-overlay">
+  <div id="config-panel">
+    <h2>⚙️ Konfiguracja Chatbota</h2>
+    <div style="font-size:0.78rem;color:#888;margin-bottom:4px">WdoAI · Akademia Górnośląska 2025/2026</div>
+
+    <!-- === PLATFORMA === -->
+    <div class="config-section-title">1. Wybierz platformę AI</div>
+    <div id="platform-cards">
+      <div class="platform-card selected" data-platform="openai" onclick="selectPlatform('openai')">
+        <div class="p-logo">🟢</div>
+        <div class="p-info">
+          <div class="p-name">OpenAI</div>
+          <div class="p-desc">GPT-4o, GPT-4o Mini</div>
+        </div>
+      </div>
+      <div class="platform-card" data-platform="gemini" onclick="selectPlatform('gemini')">
+        <div class="p-logo">🔷</div>
+        <div class="p-info">
+          <div class="p-name">Google Gemini</div>
+          <div class="p-desc">Gemini 2.0, 1.5 Pro/Flash</div>
+        </div>
+      </div>
+      <div class="platform-card" data-platform="claude" onclick="selectPlatform('claude')">
+        <div class="p-logo">🟠</div>
+        <div class="p-info">
+          <div class="p-name">Anthropic Claude</div>
+          <div class="p-desc">Claude Sonnet, Opus, Haiku</div>
+        </div>
+      </div>
+      <div class="platform-card" data-platform="grok" onclick="selectPlatform('grok')">
+        <div class="p-logo">⚡</div>
+        <div class="p-info">
+          <div class="p-name">xAI Grok</div>
+          <div class="p-desc">Grok-2, Grok-2 Mini</div>
+        </div>
+      </div>
+    </div>
+
+    <div id="cors-alert">
+      ⚠️ <strong>Uwaga CORS:</strong> Anthropic Claude i xAI Grok mogą blokować bezpośrednie wywołania z przeglądarki z powodu polityki CORS. Jeśli chatbot nie odpowiada, przejdź na <strong>OpenAI</strong> lub <strong>Gemini</strong> — działają w przeglądarce bez żadnych ograniczeń.
+    </div>
+
+    <!-- === KLUCZ API === -->
+    <div class="config-section-title">2. Klucz API</div>
+    <label class="config-label" id="api-key-label">🔑 Klucz API OpenAI</label>
+    <input type="password" id="api-key-input" class="config-input" placeholder="sk-proj-..." />
+    <div class="config-hint" id="api-key-hint">
+      Pobierz na: <a id="api-key-link" href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
+      · Klucz przechowywany tylko lokalnie w przeglądarce.
+      <span id="gemini-deprecated-note" style="display:none;color:#B45309;font-weight:600">
+        ⚠️ Modele gemini-2.0-* są deprecated i wyłączone 1 czerwca 2026 — używaj 2.5+ lub 3.x.
+      </span>
+    </div>
+
+    <!-- === MODEL === -->
+    <label class="config-label">🤖 Model AI</label>
+    <select id="model-select" class="config-select"></select>
+    <div class="config-hint" id="model-hint">GPT-4o Mini — zalecany dla większości zastosowań (szybki i tani).</div>
+
+    <!-- === TEMPERATURA === -->
+    <label class="config-label">🌡️ Temperatura <span style="font-weight:400;color:#888">(0.0 = precyzyjny · 1.0 = kreatywny)</span></label>
+    <input type="range" id="temperature-input" min="0" max="1" step="0.1" value="0.7"
+           style="width:100%;accent-color:var(--brand-secondary)" oninput="document.getElementById('temp-val').textContent=this.value" />
+    <div style="text-align:center;font-weight:700;font-size:0.82rem;color:var(--brand-secondary)" id="temp-val">0.7</div>
+
+    <!-- === SYSTEM PROMPT === -->
+    <div class="config-section-title">3. System Prompt</div>
+    <label class="config-label">📋 Instrukcja dla chatbota (System Prompt) *</label>
+    <textarea id="system-prompt-input" class="config-textarea"
+      placeholder="Wklej tutaj swój System Prompt z Lab 1...
+
+Np.:
+Jesteś [Imię], asystentem AI firmy [Nazwa]. Twoim zadaniem jest:
+1. Odpowiadać na pytania klientów po polsku
+2. Pomagać w [główna funkcja]
+3. Tłumaczyć tytuły artykułów naukowych z angielskiego na polski i odwrotnie
+4. Kierować do pracownika gdy pytanie jest zbyt skomplikowane
+
+Gdy użytkownik poprosi o przetłumaczenie tytułu artykułu, podaj:
+- Tłumaczenie tytułu
+- Krótki opis (1–2 zdania) czego prawdopodobnie dotyczy artykuł na podstawie tytułu
+
+Zawsze bądź uprzejmy i profesjonalny. Jeśli nie znasz odpowiedzi, powiedz o tym wprost."></textarea>
+    <div class="config-hint">To jest Twój System Prompt v1.0 z Lab 1. W Zadaniu 2 (Lab 2) go rozbudujesz jako v2.0.</div>
+
+    <!-- === PERSONALIZACJA === -->
+    <div class="config-section-title">4. Personalizacja chatbota</div>
+    <label class="config-label">✏️ Nazwa chatbota</label>
+    <input type="text" id="bot-name-input" class="config-input" placeholder="np. Asystent Kancelarii Nowak" />
+
+    <label class="config-label">💬 Tagline / opis</label>
+    <input type="text" id="bot-tagline-input" class="config-input" placeholder="np. Dostępny 24/7 dla klientów kancelarii" />
+
+    <label class="config-label">😊 Emoji awatara</label>
+    <input type="text" id="bot-emoji-input" class="config-input" placeholder="np. 🏛️ lub 🏥 lub 🤖" maxlength="4" />
+
+    <label class="config-label">📩 Wiadomość powitalna</label>
+    <textarea id="welcome-msg-input" class="config-textarea" rows="3"
+      placeholder="np. Dzień dobry! Jestem asystentem kancelarii. W czym mogę pomóc?"></textarea>
+
+    <!-- === KOLORY === -->
+    <div class="config-section-title">5. Kolory marki</div>
+
+    <label class="config-label">🎨 Kolor główny <span style="font-weight:400;color:#888">(nagłówek, przycisk wysyłania, ramki)</span></label>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
+      <input type="color" id="brand-primary-picker" value="#1B2A4A"
+        oninput="syncHex('brand-primary-picker','brand-primary-hex')"
+        style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
+      <input type="text" id="brand-primary-hex" class="config-input" placeholder="#1B2A4A" maxlength="7"
+        oninput="syncPicker('brand-primary-hex','brand-primary-picker')" style="flex:1" />
+    </div>
+    <div class="config-hint">Kolor główny Twojej marki. Pojawi się w nagłówku i przycisku wysyłania.</div>
+
+    <label class="config-label">🎨 Kolor dodatkowy <span style="font-weight:400;color:#888">(akcent, avatary, focus)</span></label>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
+      <input type="color" id="brand-secondary-picker" value="#2E74B5"
+        oninput="syncHex('brand-secondary-picker','brand-secondary-hex')"
+        style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
+      <input type="text" id="brand-secondary-hex" class="config-input" placeholder="#2E74B5" maxlength="7"
+        oninput="syncPicker('brand-secondary-hex','brand-secondary-picker')" style="flex:1" />
+    </div>
+    <div class="config-hint">Kolor akcentu — używany m.in. w avatarach wiadomości i efekcie hover.</div>
+
+    <!-- === SUGGESTION CHIPS === -->
+    <div class="config-section-title">6. Pytania startowe (suggestion chips)</div>
+    <label class="config-label">💡 Pytania wyświetlane jako przyciski przed rozmową</label>
+    <textarea id="chips-input" class="config-textarea" rows="6"
+      placeholder="Jak mogę umówić wizytę?&#10;Jakie dokumenty muszę przynieść?&#10;Jakie są godziny otwarcia?&#10;Przetłumacz tytuł artykułu na polski"></textarea>
+    <div class="config-hint">Każde pytanie w <strong>osobnej linii</strong>. Zalecane 4–6 pytań dopasowanych do Twojej branży.</div>
+
+    <!-- === DYNAMIC CHIPS === -->
+    <div class="config-section-title">7. Sugestie follow-up</div>
+    <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:4px">
+      <input type="checkbox" id="dynamic-chips-toggle" style="width:18px;height:18px;accent-color:var(--brand-secondary);cursor:pointer" />
+      <span style="font-size:0.88rem;color:#333">💡 Generuj sugestie kolejnych pytań po każdej odpowiedzi</span>
+    </label>
+    <div class="config-hint" style="margin-top:6px">Po każdej odpowiedzi chatbota pojawią się 2–3 klikalne pytania follow-up dopasowane do kontekstu rozmowy. Wymaga dodatkowego wywołania API.</div>
+
+    <div class="config-actions">
+      <button class="btn-cancel" onclick="closeConfig()">Anuluj</button>
+      <button class="btn-save" onclick="saveConfig()">💾 Zapisz i uruchom</button>
+    </div>
+  </div>
+</div>
+
+<!-- ========== JAVASCRIPT ========== -->
+<script>
+// =======================================================================
+// KONFIGURACJA DOMYŚLNA — możesz zmienić wartości tutaj lub przez panel
+// =======================================================================
+const DEFAULTS = {
+  platform:       'openai',
+  botName:        'Asystent AI',
+  botTagline:     'Dostępny 24/7',
+  botEmoji:       '🤖',
+  model:          'gpt-4o-mini',
+  temperature:    0.7,
+  welcomeMsg:     'Cześć! Jestem Twoim asystentem AI. W czym mogę Ci dziś pomóc? 😊',
+  systemPrompt:   '',
+  apiKey:         '',
+  brandPrimary:   '#1B2A4A',
+  brandSecondary: '#2E74B5',
+  dynamicChips:   true,
+  chips: [
+    'Jak mogę umówić wizytę?',
+    'Jakie dokumenty muszę przynieść?',
+    'Jakie są godziny otwarcia?',
+    'Czym się zajmujecie?',
+    'Przetłumacz tytuł artykułu na polski',
+    'Przetłumacz tytuł artykułu na angielski',
+  ],
+};
+// =======================================================================
+
+// ---------- PLATFORM DEFINITIONS ----------
+const PLATFORMS = {
+  openai: {
+    label:     'OpenAI',
+    badgeClass:'badge-openai',
+    keyLabel:  '🔑 Klucz API OpenAI',
+    keyPlaceholder: 'sk-proj-...',
+    keyLink:   'https://platform.openai.com/api-keys',
+    keyLinkText:'platform.openai.com/api-keys',
+    corsRisk:  false,
+    models: [
+      { v:'gpt-4o-mini',    l:'GPT-4o Mini (zalecany — szybki i tani)' },
+      { v:'gpt-4o',         l:'GPT-4o (mocniejszy)' },
+      { v:'gpt-4-turbo',    l:'GPT-4 Turbo' },
+      { v:'gpt-3.5-turbo',  l:'GPT-3.5 Turbo (najtańszy)' },
+    ],
+    modelHint: 'GPT-4o Mini — zalecany: szybki, tani, świetna jakość.',
+  },
+  gemini: {
+    label:     'Gemini',
+    badgeClass:'badge-gemini',
+    keyLabel:  '🔑 Klucz API Google AI Studio',
+    keyPlaceholder: 'AIza...',
+    keyLink:   'https://aistudio.google.com/app/apikey',
+    keyLinkText:'aistudio.google.com/app/apikey',
+    corsRisk:  false,
+    models: [
+      { v:'gemini-2.5-flash',                    l:'Gemini 2.5 Flash ⭐ (zalecany — stabilny, darmowy)' },
+      { v:'gemini-2.5-flash-lite',               l:'Gemini 2.5 Flash-Lite (najtańszy, darmowy)' },
+      { v:'gemini-2.5-pro',                      l:'Gemini 2.5 Pro (najpotężniejszy, darmowy)' },
+      { v:'gemini-3-flash-preview',              l:'Gemini 3 Flash Preview 🆕 (najnowszy, frontier)' },
+      { v:'gemini-3.1-flash-lite-preview',       l:'Gemini 3.1 Flash-Lite Preview 🆕 (tłumaczenia, agenty)' },
+      { v:'gemini-2.5-flash-lite-preview-09-2025', l:'Gemini 2.5 Flash-Lite Preview 09-2025' },
+    ],
+    modelHint: '⭐ Gemini 2.5 Flash — zalecany do chatbotów. Gemini 2.5 Pro — najlepszy do złożonych zadań. Modele 3.x — najnowsze preview, mogą mieć ograniczone limity RPM.',
+  },
+  claude: {
+    label:     'Claude',
+    badgeClass:'badge-claude',
+    keyLabel:  '🔑 Klucz API Anthropic',
+    keyPlaceholder: 'sk-ant-...',
+    keyLink:   'https://console.anthropic.com/settings/keys',
+    keyLinkText:'console.anthropic.com/settings/keys',
+    corsRisk:  true,
+    models: [
+      { v:'claude-sonnet-4-6',          l:'Claude Sonnet 4.6 (zalecany)' },
+      { v:'claude-opus-4-6',            l:'Claude Opus 4.6 (najmocniejszy)' },
+      { v:'claude-haiku-4-5-20251001',  l:'Claude Haiku 4.5 (najszybszy)' },
+    ],
+    modelHint: 'Claude Sonnet 4.6 — najlepszy stosunek jakości do ceny.',
+  },
+  grok: {
+    label:     'Grok',
+    badgeClass:'badge-grok',
+    keyLabel:  '🔑 Klucz API xAI',
+    keyPlaceholder: 'xai-...',
+    keyLink:   'https://console.x.ai/',
+    keyLinkText:'console.x.ai',
+    corsRisk:  true,
+    models: [
+      { v:'grok-2',        l:'Grok-2 (zalecany)' },
+      { v:'grok-2-mini',   l:'Grok-2 Mini (szybki)' },
+      { v:'grok-beta',     l:'Grok Beta' },
+    ],
+    modelHint: 'Grok-2 — flagowy model xAI.',
+  },
+};
+
+// ---------- STATE ----------
+let config = { ...DEFAULTS };
+let conversationHistory = [];
+let selectedPlatform = 'openai';
+
+// ---------- INIT ----------
+window.onload = () => {
+  const saved = localStorage.getItem('chatbot_config_wdoai_v2');
+  if (saved) {
+    try { config = { ...DEFAULTS, ...JSON.parse(saved) }; } catch(e) {}
+  }
+  selectedPlatform = config.platform || 'openai';
+  applyConfig();
+  if (!config.apiKey) {
+    document.getElementById('api-warning').classList.add('show');
+  } else {
+    document.getElementById('api-warning').classList.remove('show');
+    if (PLATFORMS[config.platform]?.corsRisk) {
+      document.getElementById('cors-warning').classList.add('show');
+    }
+    showWelcome();
+  }
+};
+
+function applyConfig() {
+  const p = PLATFORMS[config.platform] || PLATFORMS.openai;
+  document.getElementById('bot-name').textContent    = config.botName;
+  document.getElementById('tagline-text').textContent = config.botTagline;
+  document.getElementById('bot-avatar').textContent  = config.botEmoji;
+  document.title = config.botName + ' — WdoAI AG';
+  const badge = document.getElementById('platform-badge');
+  badge.textContent  = p.label;
+  badge.className    = 'platform-badge ' + p.badgeClass;
+
+  // Apply brand colors
+  const bp = config.brandPrimary   || DEFAULTS.brandPrimary;
+  const bs = config.brandSecondary || DEFAULTS.brandSecondary;
+  document.documentElement.style.setProperty('--brand-primary',   bp);
+  document.documentElement.style.setProperty('--brand-secondary', bs);
+
+  // Render suggestion chips
+  renderChips(config.chips || DEFAULTS.chips);
+}
+
+function renderChips(chips) {
+  const container = document.getElementById('suggestions');
+  const validChips = Array.isArray(chips) ? chips.filter(c => c.trim()) : DEFAULTS.chips;
+  container.innerHTML = validChips
+    .map(c => `<div class="suggestion-chip" onclick="sendSuggestion(this)">${escapeHtml(c.trim())}</div>`)
+    .join('');
+  container.style.display = 'flex';
+}
+
+function syncHex(pickerId, hexId) {
+  document.getElementById(hexId).value = document.getElementById(pickerId).value;
+}
+function syncPicker(hexId, pickerId) {
+  const val = document.getElementById(hexId).value.trim();
+  if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
+    document.getElementById(pickerId).value = val;
+  }
+}
+
+// ---------- DYNAMIC FOLLOW-UP CHIPS ----------
+function showDynamicChips(chips) {
+  const container = document.getElementById('dynamic-chips');
+  const label = '<div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>';
+  container.innerHTML = label + chips
+    .filter(c => typeof c === 'string' && c.trim())
+    .slice(0, 3)
+    .map(c => `<div class="dynamic-chip" onclick="sendDynamicChip(this)">${escapeHtml(c.trim())}</div>`)
+    .join('');
+  container.style.display = 'flex';
+}
+
+function clearDynamicChips() {
+  const container = document.getElementById('dynamic-chips');
+  container.innerHTML = '<div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>';
+  container.style.display = 'none';
+}
+
+function sendDynamicChip(el) {
+  const text = el.textContent;
+  clearDynamicChips();
+  document.getElementById('user-input').value = text;
+  sendMessage();
+}
+
+function extractChips(text) {
+  // Try direct JSON parse
+  try { const r = JSON.parse(text.trim()); if (Array.isArray(r)) return r; } catch(e) {}
+  // Try to extract array from within text
+  const m = text.match(/\[[\s\S]*?\]/);
+  if (m) { try { const r = JSON.parse(m[0]); if (Array.isArray(r)) return r; } catch(e) {} }
+  return [];
+}
+
+async function generateFollowUpChips() {
+  if (!config.dynamicChips) return;
+  if (!config.apiKey) return;
+
+  const suggestPrompt = 'Na podstawie ostatniej wymiany zaproponuj dokładnie 3 krótkie pytania follow-up (maks. 8 słów każde) które użytkownik może chcieć teraz zadać. Odpowiedz WYŁĄCZNIE tablicą JSON: ["pytanie1", "pytanie2", "pytanie3"]. Zero dodatkowego tekstu.';
+  const lastExchange = conversationHistory.slice(-4);
+
+  try {
+    let raw = '';
+    const platform = config.platform;
+
+    if (platform === 'openai' || platform === 'grok') {
+      const baseUrl = platform === 'grok' ? 'https://api.x.ai/v1' : 'https://api.openai.com/v1';
+      const messages = [];
+      if (config.systemPrompt) messages.push({ role: 'system', content: config.systemPrompt });
+      messages.push(...lastExchange, { role: 'user', content: suggestPrompt });
+      const res = await fetch(baseUrl + '/chat/completions', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'Authorization': 'Bearer ' + config.apiKey },
+        body: JSON.stringify({ model: config.model, messages, temperature: 0.8, max_tokens: 120 }),
+      });
+      if (res.ok) raw = (await res.json()).choices[0].message.content;
+
+    } else if (platform === 'gemini') {
+      const contents = lastExchange.map(m => ({
+        role: m.role === 'assistant' ? 'model' : 'user',
+        parts: [{ text: m.content }],
+      }));
+      contents.push({ role: 'user', parts: [{ text: suggestPrompt }] });
+      const body = { contents, generationConfig: { temperature: 0.8, maxOutputTokens: 120 } };
+      if (config.systemPrompt) body.systemInstruction = { parts: [{ text: config.systemPrompt }] };
+      const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${config.apiKey}`;
+      const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
+      if (res.ok) raw = (await res.json()).candidates[0].content.parts[0].text;
+
+    } else if (platform === 'claude') {
+      const messages = lastExchange.map(m => ({
+        role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content,
+      }));
+      messages.push({ role: 'user', content: suggestPrompt });
+      const body = { model: config.model, max_tokens: 120, messages };
+      if (config.systemPrompt) body.system = config.systemPrompt;
+      const res = await fetch('https://api.anthropic.com/v1/messages', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json', 'x-api-key': config.apiKey,
+          'anthropic-version': '2023-06-01', 'anthropic-dangerous-direct-browser-access': 'true' },
+        body: JSON.stringify(body),
+      });
+      if (res.ok) raw = (await res.json()).content[0].text;
+    }
+
+    const chips = extractChips(raw);
+    if (chips.length > 0) showDynamicChips(chips);
+  } catch(e) {
+    // Silently fail — nie przerywamy głównej rozmowy
+  }
+}
+
+function showWelcome() {
+  if (conversationHistory.length === 0 && config.welcomeMsg) {
+    appendMessage('bot', config.welcomeMsg);
+  }
+}
+
+// ---------- PLATFORM SELECTOR ----------
+function selectPlatform(platform) {
+  selectedPlatform = platform;
+  document.querySelectorAll('.platform-card').forEach(c => {
+    c.classList.toggle('selected', c.dataset.platform === platform);
+  });
+  const p = PLATFORMS[platform];
+  // API key section
+  document.getElementById('api-key-label').textContent = p.keyLabel;
+  document.getElementById('api-key-input').placeholder = p.keyPlaceholder;
+  document.getElementById('api-key-link').href         = p.keyLink;
+  document.getElementById('api-key-link').textContent  = p.keyLinkText;
+  // Models
+  const sel = document.getElementById('model-select');
+  sel.innerHTML = p.models.map(m => `<option value="${m.v}">${m.l}</option>`).join('');
+  document.getElementById('model-hint').textContent = p.modelHint;
+  // CORS warning
+  document.getElementById('cors-alert').classList.toggle('show', p.corsRisk);
+  // Gemini deprecated note
+  const depNote = document.getElementById('gemini-deprecated-note');
+  if (depNote) depNote.style.display = platform === 'gemini' ? 'block' : 'none';
+}
+
+// ---------- SEND MESSAGE ----------
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text = input.value.trim();
+  if (!text) return;
+  if (!config.apiKey) { openConfig(); return; }
+
+  input.value = '';
+  autoResize(input);
+  hideSuggestions();
+  clearDynamicChips();
+  appendMessage('user', text);
+  conversationHistory.push({ role: 'user', content: text });
+  showTyping(true);
+  document.getElementById('send-btn').disabled = true;
+
+  try {
+    const reply = await callAI(config.platform, text);
+    conversationHistory.push({ role: 'assistant', content: reply });
+    appendMessage('bot', reply);
+    generateFollowUpChips(); // async, fire-and-forget
+  } catch(err) {
+    let msg = err.message || 'Nieznany błąd';
+    if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
+      msg = 'Błąd CORS lub brak połączenia. Spróbuj OpenAI lub Gemini — działają bezpośrednio z przeglądarki.';
+    }
+    appendMessage('bot', '⚠️ Błąd: ' + msg);
+  } finally {
+    showTyping(false);
+    document.getElementById('send-btn').disabled = false;
+  }
+}
+
+// ---------- API ROUTERS ----------
+async function callAI(platform, userText) {
+  switch (platform) {
+    case 'openai': return callOpenAI();
+    case 'gemini': return callGemini();
+    case 'claude': return callClaude();
+    case 'grok':   return callGrok();
+    default:       return callOpenAI();
+  }
+}
+
+// --- OpenAI (and Grok — OpenAI-compatible) ---
+async function callOpenAICompatible(baseUrl) {
+  const messages = [];
+  if (config.systemPrompt) messages.push({ role: 'system', content: config.systemPrompt });
+  messages.push(...conversationHistory);
+
+  const res = await fetch(baseUrl + '/chat/completions', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'Authorization': 'Bearer ' + config.apiKey,
+    },
+    body: JSON.stringify({
+      model: config.model,
+      messages,
+      temperature: parseFloat(config.temperature) || 0.7,
+      max_tokens: 1724,
+    }),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'HTTP ' + res.status);
+  }
+  const data = await res.json();
+  return data.choices[0].message.content;
+}
+
+async function callOpenAI() {
+  return callOpenAICompatible('https://api.openai.com/v1');
+}
+
+async function callGrok() {
+  return callOpenAICompatible('https://api.x.ai/v1');
+}
+
+// --- Google Gemini ---
+async function callGemini() {
+  // Build conversation in Gemini format
+  const contents = conversationHistory.map(m => ({
+    role: m.role === 'assistant' ? 'model' : 'user',
+    parts: [{ text: m.content }],
+  }));
+
+  const body = {
+    contents,
+    generationConfig: {
+      temperature: parseFloat(config.temperature) || 0.7,
+      maxOutputTokens: 1724,
+    },
+  };
+  if (config.systemPrompt) {
+    body.systemInstruction = { parts: [{ text: config.systemPrompt }] };
+  }
+
+  const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${config.apiKey}`;
+  const res = await fetch(url, {
+    method: 'POST',
+    headers: { 'Content-Type': 'application/json' },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'HTTP ' + res.status);
+  }
+  const data = await res.json();
+  return data.candidates[0].content.parts[0].text;
+}
+
+// --- Anthropic Claude ---
+async function callClaude() {
+  const messages = conversationHistory.map(m => ({
+    role: m.role === 'assistant' ? 'assistant' : 'user',
+    content: m.content,
+  }));
+
+  const body = {
+    model: config.model,
+    max_tokens: 1724,
+    messages,
+  };
+  if (config.systemPrompt) body.system = config.systemPrompt;
+
+  const res = await fetch('https://api.anthropic.com/v1/messages', {
+    method: 'POST',
+    headers: {
+      'Content-Type': 'application/json',
+      'x-api-key': config.apiKey,
+      'anthropic-version': '2023-06-01',
+      'anthropic-dangerous-direct-browser-access': 'true',
+    },
+    body: JSON.stringify(body),
+  });
+  if (!res.ok) {
+    const err = await res.json().catch(() => ({}));
+    throw new Error(err.error?.message || 'HTTP ' + res.status);
+  }
+  const data = await res.json();
+  return data.content[0].text;
+}
+
+// ---------- DOM HELPERS ----------
+function appendMessage(role, text) {
+  const container = document.getElementById('chat-container');
+  const div = document.createElement('div');
+  div.className = 'message ' + role;
+  const time = new Date().toLocaleTimeString('pl-PL', { hour: '2-digit', minute: '2-digit' });
+  const emoji = role === 'bot' ? config.botEmoji : '👤';
+  div.innerHTML =
+    '<div class="msg-avatar">' + emoji + '</div>' +
+    '<div>' +
+      '<div class="msg-bubble">' + escapeHtml(text).replace(/\n/g, '<br>') + '</div>' +
+      '<div class="msg-time">' + time + '</div>' +
+    '</div>';
+  container.insertBefore(div, document.getElementById('typing-indicator'));
+  container.scrollTop = container.scrollHeight;
+}
+
+function showTyping(show) {
+  const el = document.getElementById('typing-indicator');
+  el.className = show ? 'show' : '';
+  document.getElementById('chat-container').scrollTop = 99999;
+}
+
+function escapeHtml(s) {
+  return s.replace(/&/g,'&amp;').replace(/</g,'&lt;').replace(/>/g,'&gt;').replace(/"/g,'&quot;');
+}
+
+function clearChat() {
+  conversationHistory = [];
+  const c = document.getElementById('chat-container');
+  c.innerHTML = '';
+  c.appendChild(document.getElementById('typing-indicator'));
+  clearDynamicChips();
+  document.getElementById('suggestions').style.display = 'flex';
+  if (config.apiKey) showWelcome();
+}
+
+function sendSuggestion(el) {
+  document.getElementById('user-input').value = el.textContent;
+  hideSuggestions();
+  sendMessage();
+}
+function hideSuggestions() { document.getElementById('suggestions').style.display = 'none'; }
+function handleKey(e)       { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el)     { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+
+// ---------- CONFIG PANEL ----------
+function openConfig() {
+  // populate platform cards + models for current selection
+  selectPlatform(config.platform || 'openai');
+
+  document.getElementById('api-key-input').value       = config.apiKey || '';
+  document.getElementById('bot-name-input').value      = config.botName;
+  document.getElementById('bot-tagline-input').value   = config.botTagline;
+  document.getElementById('bot-emoji-input').value     = config.botEmoji;
+  document.getElementById('system-prompt-input').value = config.systemPrompt || '';
+  document.getElementById('model-select').value        = config.model;
+  document.getElementById('temperature-input').value   = config.temperature || 0.7;
+  document.getElementById('temp-val').textContent      = config.temperature || 0.7;
+  document.getElementById('welcome-msg-input').value   = config.welcomeMsg || '';
+
+  // Colors
+  const bp = config.brandPrimary   || DEFAULTS.brandPrimary;
+  const bs = config.brandSecondary || DEFAULTS.brandSecondary;
+  document.getElementById('brand-primary-picker').value   = bp;
+  document.getElementById('brand-primary-hex').value      = bp;
+  document.getElementById('brand-secondary-picker').value = bs;
+  document.getElementById('brand-secondary-hex').value    = bs;
+
+  // Chips
+  const chips = config.chips || DEFAULTS.chips;
+  document.getElementById('chips-input').value = chips.join('\n');
+
+  // Dynamic chips toggle
+  document.getElementById('dynamic-chips-toggle').checked =
+    config.dynamicChips !== undefined ? config.dynamicChips : DEFAULTS.dynamicChips;
+
+  document.getElementById('config-overlay').classList.add('show');
+}
+
+function closeConfig() {
+  document.getElementById('config-overlay').classList.remove('show');
+}
+
+function saveConfig() {
+  const apiKey = document.getElementById('api-key-input').value.trim();
+  const systemPrompt = document.getElementById('system-prompt-input').value.trim();
+  if (!apiKey)       { alert('Wklej klucz API wybranej platformy.'); return; }
+  if (!systemPrompt) { alert('Wklej System Prompt — bez niego chatbot nie wie, jak się zachowywać.'); return; }
+
+  const platform = selectedPlatform;
+  const p = PLATFORMS[platform];
+  const defaultModel = p.models[0].v;
+
+  const chipsRaw = document.getElementById('chips-input').value
+    .split('\n').map(l => l.trim()).filter(l => l.length > 0);
+
+  config = {
+    platform,
+    apiKey,
+    systemPrompt,
+    model:          document.getElementById('model-select').value            || defaultModel,
+    botName:        document.getElementById('bot-name-input').value.trim()   || DEFAULTS.botName,
+    botTagline:     document.getElementById('bot-tagline-input').value.trim()|| DEFAULTS.botTagline,
+    botEmoji:       document.getElementById('bot-emoji-input').value.trim()  || DEFAULTS.botEmoji,
+    temperature:    parseFloat(document.getElementById('temperature-input').value) || 0.7,
+    welcomeMsg:     document.getElementById('welcome-msg-input').value.trim()|| DEFAULTS.welcomeMsg,
+    brandPrimary:   document.getElementById('brand-primary-hex').value.trim()   || DEFAULTS.brandPrimary,
+    brandSecondary: document.getElementById('brand-secondary-hex').value.trim() || DEFAULTS.brandSecondary,
+    chips:          chipsRaw.length > 0 ? chipsRaw : DEFAULTS.chips,
+    dynamicChips:   document.getElementById('dynamic-chips-toggle').checked,
+  };
+
+  localStorage.setItem('chatbot_config_wdoai_v2', JSON.stringify(config));
+  applyConfig();
+  closeConfig();
+  document.getElementById('api-warning').classList.remove('show');
+  document.getElementById('cors-warning').classList.toggle('show', p.corsRisk);
+  clearChat();
+}
+
+// close modal on backdrop click
+document.getElementById('config-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeConfig();
+});
+</script>
+</body>
+</html>
