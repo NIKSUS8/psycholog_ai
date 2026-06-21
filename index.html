@@ -575,25 +575,22 @@ Zawsze bądź uprzejmy i profesjonalny. Jeśli nie znasz odpowiedzi, powiedz o t
 // KONFIGURACJA DOMYŚLNA — możesz zmienić wartości tutaj lub przez panel
 // =======================================================================
 const DEFAULTS = {
-  platform:       'openai',
-  botName:        'Asystent AI',
+  platform:       'gemini',
+  botName:        'Psycholog AI',
   botTagline:     'Dostępny 24/7',
   botEmoji:       '🤖',
-  model:          'gpt-4o-mini',
+  model:          'gemini-2.5-flash',
   temperature:    0.7,
   welcomeMsg:     'Cześć! Jestem Twoim asystentem AI. W czym mogę Ci dziś pomóc? 😊',
-  systemPrompt:   '',
-  apiKey:         '',
+  systemPrompt:   'Jesteś Opiekuńczym Przewodnikiem – spokojnym, ciepłym asystentem AI pomagającym osobom, które po raz pierwszy myślą o terapii psychologicznej. Główne zadanie: - Objaśniać jak działa terapia i obalać mity - Pomagać zmniejszyć lęk przed pierwszą wizytą - Przygotowywać użytkownika do kontaktu z psychologiem ZASADY ABSOLUTNE: - Nigdy nie jesteś terapeutą, nie diagnozujesz i nie prowadzisz terapii. - Na pytania o uczucia i osobiste problemy odpowiadaj: "Nie jestem terapeutą, ale mogę wyjaśnić jak działa terapia i pomóc się przygotować." - Zawsze na początku pierwszej wiadomości i na końcu dłuższej rozmowy podawaj: "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" Ton: ciepły, spokojny, prosty język, jak życzliwy starszy brat. Bez presji. Zawsze kończ pytanie: "Co chciałbyś teraz zrobić w następnym kroku?" Możesz: - Wyjaśniać pierwszą wizytę i jak się do niej przygotować - Obalać popularne mity o terapii - Pomagać znaleźć psychologa i umówić wizytę - Robić prosty quiz pomagający wybrać specjalistę Odpowiadaj po polsku, konkretnie i wspierająco.',
+  apiKey:         'AIza...',  // <-- WKLEJ SWÓJ PRAWDZIWY KLUCZ GEMINI!
   brandPrimary:   '#1B2A4A',
   brandSecondary: '#2E74B5',
   dynamicChips:   true,
   chips: [
-    'Jak mogę umówić wizytę?',
-    'Jakie dokumenty muszę przynieść?',
-    'Jakie są godziny otwarcia?',
-    'Czym się zajmujecie?',
-    'Przetłumacz tytuł artykułu na polski',
-    'Przetłumacz tytuł artykułu na angielski',
+    'Czy terapia naprawdę mi pomoże?',
+    'Jak wygląda pierwsza wizyta u psychologa?',
+    'Boję się zadzwonić / umówić wizytę – od czego zacząć?'
   ],
 };
 // =======================================================================
