@@ -1,3 +1,13 @@
+Oto zmodyfikowany kod z wklejonym nowym System Promptem v3.0 i domyślnie ustawioną platformą **Gemini** (zgodnie z poprzednim wyborem) oraz dostosowanymi przykładowymi pytaniami do nowej roli chatbota.
+
+Aby uruchomić:
+1.  Skopiuj cały kod poniżej.
+2.  Zapisz jako plik `index.html`.
+3.  Otwórz w przeglądarce.
+4.  Kliknij **⚙️ Konfiguracja** i wklej swój **klucz API Gemini** (lub innej platformy).
+5.  Kliknij **💾 Zapisz i uruchom**.
+
+```html
 <!DOCTYPE html>
 <html lang="pl">
 <head>
@@ -366,13 +376,13 @@
 <!-- ========== HEADER ========== -->
 <div id="app-header">
   <div id="header-left">
-    <div id="bot-avatar">🤖</div>
+    <div id="bot-avatar">🧠</div>
     <div>
-      <div id="bot-name">Asystent AI</div>
+      <div id="bot-name">Psycholog AI</div>
       <div id="bot-tagline">
         <span id="status-dot"></span>
-        <span id="tagline-text">Dostępny 24/7</span>
-        <span id="platform-badge" class="badge-openai">OpenAI</span>
+        <span id="tagline-text">Wsparcie przed terapią</span>
+        <span id="platform-badge" class="badge-gemini">Gemini</span>
       </div>
     </div>
   </div>
@@ -393,7 +403,7 @@
 <!-- ========== CHAT WINDOW ========== -->
 <div id="chat-container"></div>
 <div id="typing-indicator">
-  <div class="msg-avatar" style="background:var(--brand-primary);width:33px;height:33px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">🤖</div>
+  <div class="msg-avatar" style="background:var(--brand-primary);width:33px;height:33px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">🧠</div>
   <div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
@@ -405,12 +415,11 @@
 <!-- ========== SUGGESTIONS ========== -->
 <div id="suggestions">
   <!-- ↓ ZMIEŃ: pytania przykładowe dla Twojej branży -->
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jak mogę umówić wizytę?</div>
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jakie dokumenty muszę przynieść?</div>
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jakie są godziny otwarcia?</div>
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Czym się zajmujecie?</div>
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Przetłumacz tytuł artykułu na polski</div>
-  <div class="suggestion-chip" onclick="sendSuggestion(this)">Przetłumacz tytuł artykułu na angielski</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Czy terapia naprawdę mi pomoże?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jak wygląda pierwsza wizyta u psychologa?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Boję się zadzwonić / umówić wizytę – od czego zacząć?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Jaka jest różnica między psychologiem a psychiatrą?</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Pomóż mi wybrać specjalistę (quiz)</div>
 </div>
 
 <!-- ========== INPUT AREA ========== -->
@@ -432,18 +441,18 @@
     <!-- === PLATFORMA === -->
     <div class="config-section-title">1. Wybierz platformę AI</div>
     <div id="platform-cards">
-      <div class="platform-card selected" data-platform="openai" onclick="selectPlatform('openai')">
-        <div class="p-logo">🟢</div>
-        <div class="p-info">
-          <div class="p-name">OpenAI</div>
-          <div class="p-desc">GPT-4o, GPT-4o Mini</div>
-        </div>
-      </div>
-      <div class="platform-card" data-platform="gemini" onclick="selectPlatform('gemini')">
+      <div class="platform-card selected" data-platform="gemini" onclick="selectPlatform('gemini')">
         <div class="p-logo">🔷</div>
         <div class="p-info">
           <div class="p-name">Google Gemini</div>
           <div class="p-desc">Gemini 2.0, 1.5 Pro/Flash</div>
+        </div>
+      </div>
+      <div class="platform-card" data-platform="openai" onclick="selectPlatform('openai')">
+        <div class="p-logo">🟢</div>
+        <div class="p-info">
+          <div class="p-name">OpenAI</div>
+          <div class="p-desc">GPT-4o, GPT-4o Mini</div>
         </div>
       </div>
       <div class="platform-card" data-platform="claude" onclick="selectPlatform('claude')">
@@ -468,10 +477,10 @@
 
     <!-- === KLUCZ API === -->
     <div class="config-section-title">2. Klucz API</div>
-    <label class="config-label" id="api-key-label">🔑 Klucz API OpenAI</label>
-    <input type="password" id="api-key-input" class="config-input" placeholder="sk-proj-..." />
+    <label class="config-label" id="api-key-label">🔑 Klucz API Google AI Studio</label>
+    <input type="password" id="api-key-input" class="config-input" placeholder="AIza..." />
     <div class="config-hint" id="api-key-hint">
-      Pobierz na: <a id="api-key-link" href="https://platform.openai.com/api-keys" target="_blank">platform.openai.com/api-keys</a>
+      Pobierz na: <a id="api-key-link" href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
       · Klucz przechowywany tylko lokalnie w przeglądarce.
       <span id="gemini-deprecated-note" style="display:none;color:#B45309;font-weight:600">
         ⚠️ Modele gemini-2.0-* są deprecated i wyłączone 1 czerwca 2026 — używaj 2.5+ lub 3.x.
@@ -481,7 +490,7 @@
     <!-- === MODEL === -->
     <label class="config-label">🤖 Model AI</label>
     <select id="model-select" class="config-select"></select>
-    <div class="config-hint" id="model-hint">GPT-4o Mini — zalecany dla większości zastosowań (szybki i tani).</div>
+    <div class="config-hint" id="model-hint">⭐ Gemini 2.5 Flash — zalecany do chatbotów. Gemini 2.5 Pro — najlepszy do złożonych zadań. Modele 3.x — najnowsze preview, mogą mieć ograniczone limity RPM.</div>
 
     <!-- === TEMPERATURA === -->
     <label class="config-label">🌡️ Temperatura <span style="font-weight:400;color:#888">(0.0 = precyzyjny · 1.0 = kreatywny)</span></label>
@@ -496,18 +505,65 @@
       placeholder="Wklej tutaj swój System Prompt z Lab 1...
 
 Np.:
-Jesteś [Imię], asystentem AI firmy [Nazwa]. Twoim zadaniem jest:
-1. Odpowiadać na pytania klientów po polsku
-2. Pomagać w [główna funkcja]
-3. Tłumaczyć tytuły artykułów naukowych z angielskiego na polski i odwrotnie
-4. Kierować do pracownika gdy pytanie jest zbyt skomplikowane
+Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI,
+który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.
 
-Gdy użytkownik poprosi o przetłumaczenie tytułu artykułu, podaj:
-- Tłumaczenie tytułu
-- Krótki opis (1–2 zdania) czego prawdopodobnie dotyczy artykuł na podstawie tytułu
+TWOJA ROLA (i tylko ta):
+- Demistyfikować terapię i obalać mity
+- Zmniejszać lęk przed pierwszą wizytą
+- Pomagać przygotować się praktycznie i mentalnie do kontaktu ze specjalistą
+- Wspierać w doborze odpowiedniego specjalisty przez prosty quiz (4 pytania)
 
-Zawsze bądź uprzejmy i profesjonalny. Jeśli nie znasz odpowiedzi, powiedz o tym wprost."></textarea>
-    <div class="config-hint">To jest Twój System Prompt v1.0 z Lab 1. W Zadaniu 2 (Lab 2) go rozbudujesz jako v2.0.</div>
+ZASADY ABSOLUTNE — nigdy ich nie łam, nawet jeśli użytkownik prosi:
+- NIGDY nie jesteś terapeutą i NIGDY nie prowadzisz terapii
+- NIGDY nie diagnozujesz, nie interpretujesz emocji, nie nazywasz ich, nie oceniasz stanu zdrowia
+- Na każde pytanie osobiste lub o uczucia ZAWSZE zacznij od:
+  „Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia
+  i pomóc przygotować się do pierwszej wizyty."
+- Jeśli użytkownik wyraża myśli samobójcze lub kryzys —
+  natychmiast przerwij rozmowę i podaj tylko numery kryzysowe
+- Nawet jeśli użytkownik pyta wprost o diagnozę — nie sugeruj jej
+- Zawsze potwierdzaj, że jesteś asystentem AI, jeśli użytkownik pyta
+
+CRISIS RESOURCES — wyświetlaj zawsze:
+- Na początku pierwszej wiadomości w rozmowie
+- Na końcu każdej dłuższej odpowiedzi
+- Natychmiast gdy pojawia się sygnał kryzysu
+
+Format: „W KRYZYSIE? Dzwoń natychmiast: 116 123 / 112 / 116 023"
+
+CO POTRAFISZ ROBIĆ DOBRZE:
+1. Wyjaśniać czym różni się psycholog / psychoterapeuta / psychiatra
+2. Opisywać jak wygląda pierwsza wizyta krok po kroku
+3. Obalać mity (np. „terapia jest dla słabych", „będą mnie diagnozować od razu")
+4. Przeprowadzać quiz (4 pytania) pomagający określić jaki specjalista jest potrzebny
+5. Podpowiadać jak znaleźć specjalistę w konkretnym mieście
+6. Dawać praktyczne wskazówki „na już" — jak napisać wiadomość do specjalisty,
+   jak się nie bać pierwszego telefonu, co zabrać na wizytę
+
+STRUKTURA KAŻDEJ ODPOWIEDZI (trzymaj się jej):
+1. Fraza ochronna (jeśli pytanie dotyczy uczuć lub sytuacji osobistej)
+2. Normalizacja obawy — krótko, bez przesady (1-2 zdania)
+3. Konkretna, praktyczna informacja lub wskazówka (max. 3-4 zdania)
+4. Pytanie zamykające: „Co chciałbyś teraz zrobić w następnym kroku?"
+
+TON I STYL:
+- Ciepły, spokojny, życzliwy — jak starszy brat lub dobry kolega
+- Prosty język, zero żargonu medycznego
+- Bez presji, bez dramatyzowania, bez oceniania
+- Nie mów „to oznaka siły i dojrzałości" — brzmi sztucznie
+- Zwięźle — nie więcej niż 4-5 zdań przed pytaniem zamykającym
+- Odpowiadaj po polsku; jeśli użytkownik pisze po angielsku — odpowiedz po angielsku
+
+CZEGO NIGDY NIE ROBISZ:
+- Nie prowadzisz terapii ani niczego co ją przypomina
+- Nie interpretujesz snów, wspomnień, relacji rodzinnych
+- Nie sugerujesz diagnozy nawet pośrednio (nawet jeśli pytają wprost)
+- Nie zachęcasz do kontynuowania rozmowy zamiast wizyty u specjalisty
+- Nie udajesz człowieka — jesteś asystentem AI i zawsze to potwierdzasz
+- Nie mówisz o sobie w pierwszej osobie jako „ja" (unikaj personalizacji)
+- Nie obiecujesz anonimowości — informuj, że rozmowa nie jest poufna"></textarea>
+    <div class="config-hint">To jest Twój System Prompt v3.0 (wersja finalna — do użycia podczas Pitch Day).</div>
 
     <!-- === PERSONALIZACJA === -->
     <div class="config-section-title">4. Personalizacja chatbota</div>
@@ -551,7 +607,7 @@ Zawsze bądź uprzejmy i profesjonalny. Jeśli nie znasz odpowiedzi, powiedz o t
     <div class="config-section-title">6. Pytania startowe (suggestion chips)</div>
     <label class="config-label">💡 Pytania wyświetlane jako przyciski przed rozmową</label>
     <textarea id="chips-input" class="config-textarea" rows="6"
-      placeholder="Jak mogę umówić wizytę?&#10;Jakie dokumenty muszę przynieść?&#10;Jakie są godziny otwarcia?&#10;Przetłumacz tytuł artykułu na polski"></textarea>
+      placeholder="Czy terapia naprawdę mi pomoże?&#10;Jak wygląda pierwsza wizyta u psychologa?&#10;Boję się zadzwonić / umówić wizytę – od czego zacząć?&#10;Jaka jest różnica między psychologiem a psychiatrą?&#10;Pomóż mi wybrać specjalistę (quiz)"></textarea>
     <div class="config-hint">Każde pytanie w <strong>osobnej linii</strong>. Zalecane 4–6 pytań dopasowanych do Twojej branży.</div>
 
     <!-- === DYNAMIC CHIPS === -->
@@ -577,12 +633,12 @@ Zawsze bądź uprzejmy i profesjonalny. Jeśli nie znasz odpowiedzi, powiedz o t
 const DEFAULTS = {
   platform:       'gemini',
   botName:        'Psycholog AI',
-  botTagline:     'Dostępny 24/7',
-  botEmoji:       '🤖',
+  botTagline:     'Wsparcie przed terapią',
+  botEmoji:       '🧠',
   model:          'gemini-2.5-flash',
   temperature:    0.7,
-  welcomeMsg:     'Cześć! Jestem Twoim asystentem AI. W czym mogę Ci dziś pomóc? 😊',
-  systemPrompt:   'Jesteś Opiekuńczym Przewodnikiem – spokojnym, ciepłym asystentem AI pomagającym osobom, które po raz pierwszy myślą o terapii psychologicznej. Główne zadanie: - Objaśniać jak działa terapia i obalać mity - Pomagać zmniejszyć lęk przed pierwszą wizytą - Przygotowywać użytkownika do kontaktu z psychologiem ZASADY ABSOLUTNE: - Nigdy nie jesteś terapeutą, nie diagnozujesz i nie prowadzisz terapii. - Na pytania o uczucia i osobiste problemy odpowiadaj: "Nie jestem terapeutą, ale mogę wyjaśnić jak działa terapia i pomóc się przygotować." - Zawsze na początku pierwszej wiadomości i na końcu dłuższej rozmowy podawaj: "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" Ton: ciepły, spokojny, prosty język, jak życzliwy starszy brat. Bez presji. Zawsze kończ pytanie: "Co chciałbyś teraz zrobić w następnym kroku?" Możesz: - Wyjaśniać pierwszą wizytę i jak się do niej przygotować - Obalać popularne mity o terapii - Pomagać znaleźć psychologa i umówić wizytę - Robić prosty quiz pomagający wybrać specjalistę Odpowiadaj po polsku, konkretnie i wspierająco.',
+  welcomeMsg:     'Cześć! Jestem Psycholog AI. Pomagam zrozumieć, jak działa terapia i przygotować się do pierwszej wizyty. W czym mogę Ci pomóc? 😊',
+  systemPrompt:   'Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI, który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.\n\nTWOJA ROLA (i tylko ta):\n- Demistyfikować terapię i obalać mity\n- Zmniejszać lęk przed pierwszą wizytą\n- Pomagać przygotować się praktycznie i mentalnie do kontaktu ze specjalistą\n- Wspierać w doborze odpowiedniego specjalisty przez prosty quiz (4 pytania)\n\nZASADY ABSOLUTNE — nigdy ich nie łam, nawet jeśli użytkownik prosi:\n- NIGDY nie jesteś terapeutą i NIGDY nie prowadzisz terapii\n- NIGDY nie diagnozujesz, nie interpretujesz emocji, nie nazywasz ich, nie oceniasz stanu zdrowia\n- Na każde pytanie osobiste lub o uczucia ZAWSZE zacznij od:\n  „Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia i pomóc przygotować się do pierwszej wizyty."\n- Jeśli użytkownik wyraża myśli samobójcze lub kryzys — natychmiast przerwij rozmowę i podaj tylko numery kryzysowe\n- Nawet jeśli użytkownik pyta wprost o diagnozę — nie sugeruj jej\n- Zawsze potwierdzaj, że jesteś asystentem AI, jeśli użytkownik pyta\n\nCRISIS RESOURCES — wyświetlaj zawsze:\n- Na początku pierwszej wiadomości w rozmowie\n- Na końcu każdej dłuższej odpowiedzi\n- Natychmiast gdy pojawia się sygnał kryzysu\n\nFormat: „W KRYZYSIE? Dzwoń natychmiast: 116 123 / 112 / 116 023"\n\nCO POTRAFISZ ROBIĆ DOBRZE:\n1. Wyjaśniać czym różni się psycholog / psychoterapeuta / psychiatra\n2. Opisywać jak wygląda pierwsza wizyta krok po kroku\n3. Obalać mity (np. „terapia jest dla słabych", „będą mnie diagnozować od razu")\n4. Przeprowadzać quiz (4 pytania) pomagający określić jaki specjalista jest potrzebny\n5. Podpowiadać jak znaleźć specjalistę w konkretnym mieście\n6. Dawać praktyczne wskazówki „na już" — jak napisać wiadomość do specjalisty, jak się nie bać pierwszego telefonu, co zabrać na wizytę\n\nSTRUKTURA KAŻDEJ ODPOWIEDZI (trzymaj się jej):\n1. Fraza ochronna (jeśli pytanie dotyczy uczuć lub sytuacji osobistej)\n2. Normalizacja obawy — krótko, bez przesady (1-2 zdania)\n3. Konkretna, praktyczna informacja lub wskazówka (max. 3-4 zdania)\n4. Pytanie zamykające: „Co chciałbyś teraz zrobić w następnym kroku?"\n\nTON I STYL:\n- Ciepły, spokojny, życzliwy — jak starszy brat lub dobry kolega\n- Prosty język, zero żargonu medycznego\n- Bez presji, bez dramatyzowania, bez oceniania\n- Nie mów „to oznaka siły i dojrzałości" — brzmi sztucznie\n- Zwięźle — nie więcej niż 4-5 zdań przed pytaniem zamykającym\n- Odpowiadaj po polsku; jeśli użytkownik pisze po angielsku — odpowiedz po angielsku\n\nCZEGO NIGDY NIE ROBISZ:\n- Nie prowadzisz terapii ani niczego co ją przypomina\n- Nie interpretujesz snów, wspomnień, relacji rodzinnych\n- Nie sugerujesz diagnozy nawet pośrednio (nawet jeśli pytają wprost)\n- Nie zachęcasz do kontynuowania rozmowy zamiast wizyty u specjalisty\n- Nie udajesz człowieka — jesteś asystentem AI i zawsze to potwierdzasz\n- Nie mówisz o sobie w pierwszej osobie jako „ja" (unikaj personalizacji)\n- Nie obiecujesz anonimowości — informuj, że rozmowa nie jest poufna',
   apiKey:         'AIza...',  // <-- WKLEJ SWÓJ PRAWDZIWY KLUCZ GEMINI!
   brandPrimary:   '#1B2A4A',
   brandSecondary: '#2E74B5',
@@ -590,7 +646,9 @@ const DEFAULTS = {
   chips: [
     'Czy terapia naprawdę mi pomoże?',
     'Jak wygląda pierwsza wizyta u psychologa?',
-    'Boję się zadzwonić / umówić wizytę – od czego zacząć?'
+    'Boję się zadzwonić / umówić wizytę – od czego zacząć?',
+    'Jaka jest różnica między psychologiem a psychiatrą?',
+    'Pomóż mi wybrać specjalistę (quiz)'
   ],
 };
 // =======================================================================
@@ -666,7 +724,7 @@ const PLATFORMS = {
 // ---------- STATE ----------
 let config = { ...DEFAULTS };
 let conversationHistory = [];
-let selectedPlatform = 'openai';
+let selectedPlatform = 'gemini';
 
 // ---------- INIT ----------
 window.onload = () => {
@@ -674,7 +732,7 @@ window.onload = () => {
   if (saved) {
     try { config = { ...DEFAULTS, ...JSON.parse(saved) }; } catch(e) {}
   }
-  selectedPlatform = config.platform || 'openai';
+  selectedPlatform = config.platform || 'gemini';
   applyConfig();
   if (!config.apiKey) {
     document.getElementById('api-warning').classList.add('show');
@@ -688,7 +746,7 @@ window.onload = () => {
 };
 
 function applyConfig() {
-  const p = PLATFORMS[config.platform] || PLATFORMS.openai;
+  const p = PLATFORMS[config.platform] || PLATFORMS.gemini;
   document.getElementById('bot-name').textContent    = config.botName;
   document.getElementById('tagline-text').textContent = config.botTagline;
   document.getElementById('bot-avatar').textContent  = config.botEmoji;
@@ -1040,7 +1098,7 @@ function autoResize(el)     { el.style.height = 'auto'; el.style.height = Math.m
 // ---------- CONFIG PANEL ----------
 function openConfig() {
   // populate platform cards + models for current selection
-  selectPlatform(config.platform || 'openai');
+  selectPlatform(config.platform || 'gemini');
 
   document.getElementById('api-key-input').value       = config.apiKey || '';
   document.getElementById('bot-name-input').value      = config.botName;
@@ -1119,3 +1177,4 @@ document.getElementById('config-overlay').addEventListener('click', function(e) 
 </script>
 </body>
 </html>
+```
