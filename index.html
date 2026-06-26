@@ -1047,6 +1047,18 @@ async function sendMessage() {
   const input = document.getElementById('user-input');
   const text = input.value.trim();
   if (!text) return;
+
+  // Quiz trigger check
+  const textLower = text.toLowerCase();
+  const quizTriggers = ['quiz', 'pomóż mi wybrać specjalistę', 'pomoz mi wybrac'];
+  if (quizTriggers.some(t => textLower.includes(t))) {
+    input.value = '';
+    autoResize(input);
+    hideSuggestions();
+    openQuiz();
+    return;
+  }
+
   if (!config.apiKey) { openConfig(); return; }
 
   input.value = '';
@@ -1224,6 +1236,12 @@ function clearChat() {
 }
 
 function sendSuggestion(el) {
+  const text = el.textContent.trim().toLowerCase();
+  if (text.includes('quiz') || text.includes('pomóż mi wybrać')) {
+    hideSuggestions();
+    openQuiz();
+    return;
+  }
   document.getElementById('user-input').value = el.textContent;
   hideSuggestions();
   sendMessage();
@@ -1515,34 +1533,6 @@ function sendResultToChat() {
   document.getElementById('user-input').value = msg;
   hideSuggestions();
   sendMessage();
-}
-
-// Intercept "Pomóż mi wybrać specjalistę (quiz)" chip
-const _origSendSuggestion = sendSuggestion;
-function sendSuggestion(el) {
-  const text = el.textContent.trim().toLowerCase();
-  if (text.includes('quiz') || text.includes('pomóż mi wybrać')) {
-    hideSuggestions();
-    openQuiz();
-    return;
-  }
-  _origSendSuggestion(el);
-}
-
-// Also intercept sendMessage if user types the trigger manually
-const _origSendMessage = sendMessage;
-async function sendMessage() {
-  const input = document.getElementById('user-input');
-  const text = (input.value || '').trim().toLowerCase();
-  const quizTriggers = ['quiz', 'pomóż mi wybrać specjalistę', 'pomoz mi wybrac', '🧠 pomóż'];
-  if (quizTriggers.some(t => text.includes(t))) {
-    input.value = '';
-    autoResize(input);
-    hideSuggestions();
-    openQuiz();
-    return;
-  }
-  await _origSendMessage();
 }
 
 // Close quiz on backdrop click
