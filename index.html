@@ -4,19 +4,20 @@
 <meta http-equiv="Content-Security-Policy" content="upgrade-insecure-requests">
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Psycholog AI — WdoAI AG 2025/2026</title>
+  <title>AI Chatbot — Szablon | WdoAI AG 2025/2026</title>
 
   <style>
-    /* ===== KOLORY MARKI — PSYCHOLOG AI ===== */
+    /* ===== DOSTOSUJ TUTAJ — zmień kolory i styl swojego chatbota ===== */
     :root {
-      --brand-primary:   #1B2A4A;
-      --brand-secondary: #2E74B5;
-      --brand-accent:    #4CAF50;
-      --brand-bg:        #F4F7FB;
-      --brand-chat-user: #E8F0FE;
-      --brand-chat-bot:  #FFFFFF;
+      --brand-primary:   #1B2A4A;   /* ← ZMIEŃ: kolor główny Twojej marki  */
+      --brand-secondary: #2E74B5;   /* ← ZMIEŃ: kolor dodatkowy             */
+      --brand-accent:    #7030A0;   /* ← ZMIEŃ: kolor akcentu               */
+      --brand-bg:        #F4F7FB;   /* ← ZMIEŃ: tło aplikacji               */
+      --brand-chat-user: #E8F0FE;   /* ← ZMIEŃ: tło bąbelka użytkownika     */
+      --brand-chat-bot:  #FFFFFF;   /* ← ZMIEŃ: tło bąbelka chatbota        */
       --font-main:       'Segoe UI', Arial, sans-serif;
     }
+    /* ================================================================ */
 
     * { box-sizing: border-box; margin: 0; padding: 0; }
     body {
@@ -27,7 +28,7 @@
       flex-direction: column;
     }
 
-    /* HEADER */
+    /* ---------- HEADER ---------- */
     #app-header {
       background: var(--brand-primary);
       color: #fff;
@@ -53,6 +54,7 @@
     #status-dot  { width: 8px; height: 8px; background: #4CAF50; border-radius: 50%; animation: pulse 2s infinite; display: inline-block; }
     @keyframes pulse { 0%,100%{opacity:1} 50%{opacity:0.35} }
 
+    /* Platform badge in header */
     #platform-badge {
       font-size: 0.68rem;
       padding: 2px 9px;
@@ -81,7 +83,7 @@
     }
     .header-btn:hover { background: rgba(255,255,255,0.22); }
 
-    /* WARNINGS */
+    /* ---------- WARNINGS / BANNERS ---------- */
     .info-banner {
       padding: 10px 18px;
       font-size: 0.84rem;
@@ -95,7 +97,7 @@
     #api-warning  { background: #FFF3CD; color: #856404; border-bottom: 1px solid #FECB02; }
     #cors-warning { background: #FDE8E8; color: #7B2120; border-bottom: 1px solid #F5C6C6; }
 
-    /* CHAT */
+    /* ---------- CHAT WINDOW ---------- */
     #chat-container {
       flex: 1;
       overflow-y: auto;
@@ -106,7 +108,7 @@
       scroll-behavior: smooth;
     }
 
-    /* BUBBLES */
+    /* ---------- MESSAGE BUBBLES ---------- */
     .message {
       display: flex;
       gap: 9px;
@@ -142,7 +144,7 @@
     .user .msg-time { text-align: left; }
     .bot  .msg-time { text-align: right; }
 
-    /* TYPING */
+    /* ---------- TYPING INDICATOR ---------- */
     #typing-indicator { display: none; align-self: flex-start; align-items: center; gap: 9px; }
     #typing-indicator.show { display: flex; }
     .typing-dots { background:#fff; border:1px solid #E0E6F0; padding:11px 16px; border-radius:18px; border-bottom-left-radius:4px; display:flex; gap:4px; align-items:center; }
@@ -150,7 +152,7 @@
     .dot:nth-child(2){animation-delay:0.2s} .dot:nth-child(3){animation-delay:0.4s}
     @keyframes bounce{0%,100%{transform:translateY(0)}50%{transform:translateY(-6px)}}
 
-    /* INPUT */
+    /* ---------- INPUT AREA ---------- */
     #input-area {
       background: #fff;
       border-top: 1px solid #DDE3ED;
@@ -191,7 +193,7 @@
     #send-btn:active { transform: scale(0.92); }
     #send-btn:disabled { background: #CCC; cursor: not-allowed; }
 
-    /* SUGGESTIONS */
+    /* ---------- SUGGESTIONS ---------- */
     #suggestions { display: flex; gap: 7px; flex-wrap: wrap; padding: 0 18px 10px; background: #fff; }
     .suggestion-chip {
       background: var(--brand-bg);
@@ -206,104 +208,7 @@
     }
     .suggestion-chip:hover { background: var(--brand-secondary); color: #fff; border-color: var(--brand-secondary); }
 
-    /* QUIZ */
-    .quiz-container {
-      background: var(--brand-chat-bot);
-      border: 2px solid var(--brand-secondary);
-      border-radius: 18px;
-      padding: 18px 20px;
-      max-width: 90%;
-      align-self: flex-start;
-      margin: 8px 0;
-      box-shadow: 0 2px 8px rgba(0,0,0,0.06);
-    }
-    .quiz-container .quiz-question {
-      font-weight: 600;
-      color: var(--brand-primary);
-      font-size: 0.95rem;
-      margin-bottom: 12px;
-    }
-    .quiz-container .quiz-options {
-      display: flex;
-      flex-direction: column;
-      gap: 8px;
-    }
-    .quiz-container .quiz-option {
-      background: var(--brand-bg);
-      border: 1.5px solid #CDD5E0;
-      border-radius: 12px;
-      padding: 10px 14px;
-      cursor: pointer;
-      font-size: 0.88rem;
-      color: #1A1A2E;
-      transition: all 0.18s;
-      text-align: left;
-    }
-    .quiz-container .quiz-option:hover {
-      border-color: var(--brand-secondary);
-      background: #E8F0FE;
-    }
-    .quiz-container .quiz-option.selected {
-      border-color: var(--brand-secondary);
-      background: var(--brand-chat-user);
-    }
-    .quiz-container .quiz-progress {
-      font-size: 0.72rem;
-      color: #888;
-      margin-top: 10px;
-      text-align: right;
-    }
-    .quiz-container .quiz-result {
-      background: #E8F5E9;
-      border: 1px solid #4CAF50;
-      border-radius: 12px;
-      padding: 14px 16px;
-      margin-top: 10px;
-      color: #1A1A2E;
-      font-size: 0.9rem;
-    }
-    .quiz-container .quiz-result strong {
-      color: var(--brand-primary);
-    }
-
-    /* DYNAMIC CHIPS */
-    #dynamic-chips {
-      display: none;
-      gap: 6px;
-      flex-wrap: wrap;
-      padding: 8px 18px 10px;
-      background: #fff;
-      border-top: 1px dashed #D0DCF0;
-      flex-shrink: 0;
-      animation: fadeIn 0.25s ease;
-    }
-    #dynamic-chips-label {
-      width: 100%;
-      font-size: 0.68rem;
-      font-weight: 600;
-      color: #AAA;
-      text-transform: uppercase;
-      letter-spacing: 0.05em;
-      margin-bottom: 2px;
-    }
-    .dynamic-chip {
-      background: linear-gradient(135deg, #f4f8ff, #e8f0fe);
-      border: 1px solid var(--brand-secondary);
-      padding: 5px 13px;
-      border-radius: 16px;
-      font-size: 0.77rem;
-      cursor: pointer;
-      color: var(--brand-primary);
-      transition: all 0.18s;
-      white-space: nowrap;
-      opacity: 0.9;
-    }
-    .dynamic-chip:hover { background: var(--brand-secondary); color: #fff; border-color: var(--brand-secondary); opacity: 1; }
-
-    /* FOOTER */
-    #footer-badge { text-align: center; font-size: 0.67rem; color: #BBB; padding: 5px; background: #fff; border-top: 1px solid #EEE; flex-shrink: 0; }
-
-    /* CONFIG MODAL */
+    /* ---------- CONFIG MODAL ---------- */
     #config-overlay {
       display: none;
       position: fixed;
@@ -353,6 +258,7 @@
     .config-hint { font-size: 0.73rem; color: #888; margin-top: 4px; line-height: 1.45; }
     .config-hint a { color: var(--brand-secondary); }
 
+    /* Platform selector cards */
     #platform-cards { display: grid; grid-template-columns: 1fr 1fr; gap: 8px; margin-bottom: 4px; }
     .platform-card {
       border: 2px solid #DDE3ED;
@@ -371,6 +277,7 @@
     .platform-card .p-name { font-weight: 700; font-size: 0.88rem; color: #1A1A2E; }
     .platform-card .p-desc { font-size: 0.7rem; color: #888; margin-top: 1px; }
 
+    /* CORS alert inside config */
     #cors-alert {
       background: #FDE8E8;
       border: 1px solid #F5C6C6;
@@ -388,16 +295,186 @@
     .btn-save:hover { background: var(--brand-secondary); }
     .btn-cancel { background: #f0f0f0; color: #555; border: none; padding: 10px 18px; border-radius: 10px; cursor: pointer; font-size: 0.88rem; }
 
+    /* ---------- DYNAMIC FOLLOW-UP CHIPS ---------- */
+    #dynamic-chips {
+      display: none;
+      gap: 6px;
+      flex-wrap: wrap;
+      padding: 8px 18px 10px;
+      background: #fff;
+      border-top: 1px dashed #D0DCF0;
+      flex-shrink: 0;
+      animation: fadeIn 0.25s ease;
+    }
+    #dynamic-chips-label {
+      width: 100%;
+      font-size: 0.68rem;
+      font-weight: 600;
+      color: #AAA;
+      text-transform: uppercase;
+      letter-spacing: 0.05em;
+      margin-bottom: 2px;
+    }
+    .dynamic-chip {
+      background: linear-gradient(135deg, #f4f8ff, #e8f0fe);
+      border: 1px solid var(--brand-secondary);
+      padding: 5px 13px;
+      border-radius: 16px;
+      font-size: 0.77rem;
+      cursor: pointer;
+      color: var(--brand-primary);
+      transition: all 0.18s;
+      white-space: nowrap;
+      opacity: 0.9;
+    }
+    .dynamic-chip:hover { background: var(--brand-secondary); color: #fff; border-color: var(--brand-secondary); opacity: 1; }
+
+    /* ---------- FOOTER ---------- */
+    #footer-badge { text-align: center; font-size: 0.67rem; color: #BBB; padding: 5px; background: #fff; border-top: 1px solid #EEE; flex-shrink: 0; }
+
     @media (max-width: 480px) {
       .message { max-width: 95%; }
       #config-panel { padding: 18px; }
       #platform-cards { grid-template-columns: 1fr; }
     }
+
+    /* ========== QUIZ STYLES ========== */
+    #quiz-overlay {
+      display: none;
+      position: fixed;
+      inset: 0;
+      background: rgba(0,0,0,0.55);
+      z-index: 200;
+      align-items: center;
+      justify-content: center;
+    }
+    #quiz-overlay.show { display: flex; }
+    #quiz-panel {
+      background: #fff;
+      border-radius: 20px;
+      padding: 32px 28px 24px;
+      width: 540px;
+      max-width: 96vw;
+      max-height: 92vh;
+      overflow-y: auto;
+      box-shadow: 0 24px 64px rgba(27,42,74,0.28);
+      animation: fadeIn 0.25s ease;
+    }
+    #quiz-header {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+      margin-bottom: 6px;
+    }
+    #quiz-icon {
+      width: 48px; height: 48px;
+      background: var(--brand-primary);
+      border-radius: 50%;
+      display: flex; align-items: center; justify-content: center;
+      font-size: 24px;
+      flex-shrink: 0;
+    }
+    #quiz-title { font-size: 1.1rem; font-weight: 700; color: var(--brand-primary); }
+    #quiz-subtitle { font-size: 0.76rem; color: #888; margin-top: 2px; }
+
+    #quiz-progress-bar-wrap {
+      background: #E8F0FE;
+      border-radius: 8px;
+      height: 6px;
+      margin: 18px 0 22px;
+      overflow: hidden;
+    }
+    #quiz-progress-bar {
+      height: 100%;
+      background: linear-gradient(90deg, var(--brand-secondary), var(--brand-accent, #7030A0));
+      border-radius: 8px;
+      transition: width 0.4s ease;
+      width: 0%;
+    }
+    #quiz-step-label {
+      font-size: 0.7rem;
+      font-weight: 700;
+      color: var(--brand-secondary);
+      text-transform: uppercase;
+      letter-spacing: 0.06em;
+      margin-bottom: 10px;
+    }
+    #quiz-question-text {
+      font-size: 1.02rem;
+      font-weight: 600;
+      color: var(--brand-primary);
+      line-height: 1.5;
+      margin-bottom: 20px;
+    }
+    .quiz-options { display: flex; flex-direction: column; gap: 10px; }
+    .quiz-option {
+      border: 2px solid #DDE3ED;
+      border-radius: 12px;
+      padding: 13px 16px;
+      cursor: pointer;
+      transition: all 0.18s;
+      font-size: 0.9rem;
+      color: #1A1A2E;
+      background: #fff;
+      text-align: left;
+      line-height: 1.45;
+      display: flex;
+      align-items: flex-start;
+      gap: 10px;
+    }
+    .quiz-option:hover {
+      border-color: var(--brand-secondary);
+      background: #F0F6FF;
+      color: var(--brand-primary);
+    }
+    .quiz-option .opt-emoji { font-size: 18px; flex-shrink: 0; margin-top: 1px; }
+
+    /* Result card */
+    #quiz-result { display: none; }
+    #quiz-result.show { display: block; }
+    .result-card {
+      border-radius: 14px;
+      padding: 22px 20px;
+      margin-bottom: 16px;
+      text-align: center;
+    }
+    .result-card.psycholog      { background: linear-gradient(135deg, #E8F0FE, #D0E4FF); border: 2px solid #2E74B5; }
+    .result-card.psychoterapeuta{ background: linear-gradient(135deg, #F0E8FE, #E2D0FF); border: 2px solid #7030A0; }
+    .result-card.psychiatra     { background: linear-gradient(135deg, #FDE8F0, #FFD0E2); border: 2px solid #B52E5A; }
+    .result-emoji { font-size: 48px; margin-bottom: 10px; }
+    .result-type { font-size: 1.25rem; font-weight: 800; color: var(--brand-primary); margin-bottom: 6px; }
+    .result-desc { font-size: 0.88rem; color: #444; line-height: 1.6; }
+    .result-note { font-size: 0.78rem; color: #888; margin-top: 10px; font-style: italic; }
+
+    .quiz-footer-btns {
+      display: flex; gap: 10px; margin-top: 20px; flex-wrap: wrap; justify-content: flex-end;
+    }
+    .quiz-btn-primary {
+      background: var(--brand-primary); color: #fff;
+      border: none; padding: 10px 22px; border-radius: 10px;
+      cursor: pointer; font-weight: 600; font-size: 0.88rem;
+      transition: background 0.2s;
+    }
+    .quiz-btn-primary:hover { background: var(--brand-secondary); }
+    .quiz-btn-secondary {
+      background: #f0f0f0; color: #555;
+      border: none; padding: 10px 18px; border-radius: 10px;
+      cursor: pointer; font-size: 0.88rem;
+      transition: background 0.2s;
+    }
+    .quiz-btn-secondary:hover { background: #e0e0e0; }
+    .quiz-btn-chat {
+      background: var(--brand-secondary); color: #fff;
+      border: none; padding: 10px 22px; border-radius: 10px;
+      cursor: pointer; font-weight: 600; font-size: 0.88rem;
+      transition: background 0.2s;
+    }
+    .quiz-btn-chat:hover { background: var(--brand-primary); }
   </style>
 </head>
 <body>
 
-<!-- HEADER -->
+<!-- ========== HEADER ========== -->
 <div id="app-header">
   <div id="header-left">
     <div id="bot-avatar">🧠</div>
@@ -416,7 +493,7 @@
   </div>
 </div>
 
-<!-- BANNERS -->
+<!-- ========== BANNERS ========== -->
 <div id="api-warning" class="info-banner show">
   ⚠️ <strong>Brak klucza API.</strong>&nbsp; Kliknij <strong>⚙️ Konfiguracja</strong>, wybierz platformę AI i wklej swój klucz, aby uruchomić chatbota.
 </div>
@@ -424,173 +501,259 @@
   🔒 <strong>Uwaga (Claude / Grok):</strong>&nbsp; Anthropic i xAI mogą blokować zapytania z przeglądarki (CORS). Jeśli chatbot nie odpowiada, skorzystaj z OpenAI lub Gemini.
 </div>
 
-<!-- CHAT -->
+<!-- ========== CHAT WINDOW ========== -->
 <div id="chat-container"></div>
 <div id="typing-indicator">
   <div class="msg-avatar" style="background:var(--brand-primary);width:33px;height:33px;font-size:15px;border-radius:50%;display:flex;align-items:center;justify-content:center">🧠</div>
   <div class="typing-dots"><div class="dot"></div><div class="dot"></div><div class="dot"></div></div>
 </div>
 
-<!-- DYNAMIC CHIPS -->
+<!-- ========== DYNAMIC FOLLOW-UP CHIPS ========== -->
 <div id="dynamic-chips">
   <div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>
 </div>
 
-<!-- SUGGESTIONS -->
+<!-- ========== SUGGESTIONS ========== -->
 <div id="suggestions">
   <div class="suggestion-chip" onclick="sendSuggestion(this)">Czy terapia naprawdę mi pomoże?</div>
   <div class="suggestion-chip" onclick="sendSuggestion(this)">Jak wygląda pierwsza wizyta u psychologa?</div>
   <div class="suggestion-chip" onclick="sendSuggestion(this)">Boję się zadzwonić / umówić wizytę – od czego zacząć?</div>
   <div class="suggestion-chip" onclick="sendSuggestion(this)">Jaka jest różnica między psychologiem a psychiatrą?</div>
-  <div class="suggestion-chip" onclick="startQuiz()">🧠 Pomóż mi wybrać specjalistę (quiz)</div>
+  <div class="suggestion-chip" onclick="sendSuggestion(this)">Pomóż mi wybrać specjalistę (quiz)</div>
 </div>
 
-<!-- INPUT -->
+<!-- ========== INPUT AREA ========== -->
 <div id="input-area">
   <textarea id="user-input" rows="1" placeholder="Napisz wiadomość..."
     onkeydown="handleKey(event)" oninput="autoResize(this)"></textarea>
   <button id="send-btn" onclick="sendMessage()" title="Wyślij">➤</button>
 </div>
 
-<!-- FOOTER -->
-<div id="footer-badge">Psycholog AI · WdoAI · Akademia Górnośląska 2025/2026</div>
+<!-- ========== FOOTER ========== -->
+<div id="footer-badge">WdoAI · Akademia Górnośląska 2025/2026 · POZ_App_Template v2.0 · obsługiwane platformy: OpenAI · Gemini · Claude · Grok</div>
 
-<!-- CONFIG MODAL -->
+<!-- ========== QUIZ MODAL ========== -->
+<div id="quiz-overlay">
+  <div id="quiz-panel">
+    <div id="quiz-header">
+      <div id="quiz-icon">🧠</div>
+      <div>
+        <div id="quiz-title">Pomóż mi wybrać specjalistę</div>
+        <div id="quiz-subtitle">Quiz adaptacyjny · 5 pytań · ~2 minuty</div>
+      </div>
+      <button onclick="closeQuiz()" style="margin-left:auto;background:none;border:none;font-size:22px;cursor:pointer;color:#AAA;line-height:1">✕</button>
+    </div>
+
+    <div id="quiz-progress-bar-wrap">
+      <div id="quiz-progress-bar"></div>
+    </div>
+
+    <!-- Pytania -->
+    <div id="quiz-questions">
+      <div id="quiz-step-label">Pytanie 1 z 5</div>
+      <div id="quiz-question-text"></div>
+      <div id="quiz-options-container" class="quiz-options"></div>
+    </div>
+
+    <!-- Wynik -->
+    <div id="quiz-result">
+      <div id="quiz-result-card" class="result-card"></div>
+      <div class="quiz-footer-btns">
+        <button class="quiz-btn-secondary" onclick="restartQuiz()">🔄 Zacznij od nowa</button>
+        <button class="quiz-btn-chat" onclick="sendResultToChat()">💬 Porozmawiaj o tym</button>
+        <button class="quiz-btn-primary" onclick="closeQuiz()">✓ Zamknij</button>
+      </div>
+    </div>
+  </div>
+</div>
+
+<!-- ========== CONFIG MODAL ========== -->
 <div id="config-overlay">
   <div id="config-panel">
     <h2>⚙️ Konfiguracja Chatbota</h2>
-    <div style="font-size:0.78rem;color:#888;margin-bottom:4px">Psycholog AI · Akademia Górnośląska 2025/2026</div>
+    <div style="font-size:0.78rem;color:#888;margin-bottom:4px">WdoAI · Akademia Górnośląska 2025/2026</div>
 
+    <!-- === PLATFORMA === -->
     <div class="config-section-title">1. Wybierz platformę AI</div>
     <div id="platform-cards">
       <div class="platform-card selected" data-platform="gemini" onclick="selectPlatform('gemini')">
         <div class="p-logo">🔷</div>
-        <div class="p-info"><div class="p-name">Google Gemini</div><div class="p-desc">Gemini 2.0, 1.5 Pro/Flash</div></div>
+        <div class="p-info">
+          <div class="p-name">Google Gemini</div>
+          <div class="p-desc">Gemini 2.0, 1.5 Pro/Flash</div>
+        </div>
       </div>
       <div class="platform-card" data-platform="openai" onclick="selectPlatform('openai')">
         <div class="p-logo">🟢</div>
-        <div class="p-info"><div class="p-name">OpenAI</div><div class="p-desc">GPT-4o, GPT-4o Mini</div></div>
+        <div class="p-info">
+          <div class="p-name">OpenAI</div>
+          <div class="p-desc">GPT-4o, GPT-4o Mini</div>
+        </div>
       </div>
       <div class="platform-card" data-platform="claude" onclick="selectPlatform('claude')">
         <div class="p-logo">🟠</div>
-        <div class="p-info"><div class="p-name">Anthropic Claude</div><div class="p-desc">Claude Sonnet, Opus, Haiku</div></div>
+        <div class="p-info">
+          <div class="p-name">Anthropic Claude</div>
+          <div class="p-desc">Claude Sonnet, Opus, Haiku</div>
+        </div>
       </div>
       <div class="platform-card" data-platform="grok" onclick="selectPlatform('grok')">
         <div class="p-logo">⚡</div>
-        <div class="p-info"><div class="p-name">xAI Grok</div><div class="p-desc">Grok-2, Grok-2 Mini</div></div>
+        <div class="p-info">
+          <div class="p-name">xAI Grok</div>
+          <div class="p-desc">Grok-2, Grok-2 Mini</div>
+        </div>
       </div>
     </div>
-    <div id="cors-alert">⚠️ <strong>Uwaga CORS:</strong> Claude i Grok mogą blokować zapytania z przeglądarki. Jeśli chatbot nie odpowiada, przejdź na <strong>OpenAI</strong> lub <strong>Gemini</strong>.</div>
 
+    <div id="cors-alert">
+      ⚠️ <strong>Uwaga CORS:</strong> Anthropic Claude i xAI Grok mogą blokować bezpośrednie wywołania z przeglądarki z powodu polityki CORS. Jeśli chatbot nie odpowiada, przejdź na <strong>OpenAI</strong> lub <strong>Gemini</strong> — działają w przeglądarce bez żadnych ograniczeń.
+    </div>
+
+    <!-- === KLUCZ API === -->
     <div class="config-section-title">2. Klucz API</div>
     <label class="config-label" id="api-key-label">🔑 Klucz API Google AI Studio</label>
     <input type="password" id="api-key-input" class="config-input" placeholder="AIza..." />
     <div class="config-hint" id="api-key-hint">
       Pobierz na: <a id="api-key-link" href="https://aistudio.google.com/app/apikey" target="_blank">aistudio.google.com/app/apikey</a>
       · Klucz przechowywany tylko lokalnie w przeglądarce.
+      <span id="gemini-deprecated-note" style="display:none;color:#B45309;font-weight:600">
+        ⚠️ Modele gemini-2.0-* są deprecated i wyłączone 1 czerwca 2026 — używaj 2.5+ lub 3.x.
+      </span>
     </div>
 
+    <!-- === MODEL === -->
     <label class="config-label">🤖 Model AI</label>
     <select id="model-select" class="config-select"></select>
-    <div class="config-hint" id="model-hint">⭐ Gemini 2.5 Flash — zalecany do chatbotów.</div>
+    <div class="config-hint" id="model-hint">⭐ Gemini 2.5 Flash — zalecany do chatbotów. Gemini 2.5 Pro — najlepszy do złożonych zadań. Modele 3.x — najnowsze preview, mogą mieć ograniczone limity RPM.</div>
 
-    <label class="config-label">🌡️ Temperatura</label>
+    <!-- === TEMPERATURA === -->
+    <label class="config-label">🌡️ Temperatura <span style="font-weight:400;color:#888">(0.0 = precyzyjny · 1.0 = kreatywny)</span></label>
     <input type="range" id="temperature-input" min="0" max="1" step="0.1" value="0.4"
            style="width:100%;accent-color:var(--brand-secondary)" oninput="document.getElementById('temp-val').textContent=this.value" />
     <div style="text-align:center;font-weight:700;font-size:0.82rem;color:var(--brand-secondary)" id="temp-val">0.4</div>
 
+    <!-- === SYSTEM PROMPT === -->
     <div class="config-section-title">3. System Prompt</div>
     <label class="config-label">📋 Instrukcja dla chatbota (System Prompt) *</label>
-    <textarea id="system-prompt-input" class="config-textarea" rows="12">Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI, który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.
+    <textarea id="system-prompt-input" class="config-textarea"
+      placeholder="Wklej tutaj swój System Prompt...">Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI, który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.
 
-ZASADY FORMATOWANIA:
-- NIGDY nie używaj gwiazdek (*), podkreślników (_), ani żadnego formatowania Markdown
-- Używaj zwykłego tekstu z numeracją: 1., 2., 3.
-- Informację kryzysową "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" umieszczaj TYLKO na początku pierwszej wiadomości w rozmowie
+ZASADY FORMATOWANIA - BARDZO WAŻNE:
+- NIGDY nie używaj gwiazdek (*), podkreślników (_), ani żadnego innego formatowania Markdown
+- NIGDY nie używaj pogrubień ani kursywy
+- Używaj zwykłego tekstu z numeracją: 1., 2., 3. zamiast **pogrubień**
+- Informację kryzysową "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" umieszczaj TYLKO na początku pierwszej wiadomości w rozmowie, NIGDY na końcu odpowiedzi
+- Pisz zwięźle i konkretnie
 
-TWOJA ROLA:
+TWOJA ROLA (i tylko ta):
 - Demistyfikować terapię i obalać mity
 - Zmniejszać lęk przed pierwszą wizytą
 - Pomagać przygotować się praktycznie i mentalnie do kontaktu ze specjalistą
-- Wspierać w doborze odpowiedniego specjalisty przez quiz (4 pytania)
+- Wspierać w doborze odpowiedniego specjalisty przez prosty quiz (4 pytania)
 
-ZASADY ABSOLUTNE:
+ZASADY ABSOLUTNE — nigdy ich nie łam, nawet jeśli użytkownik prosi:
 - NIGDY nie jesteś terapeutą i NIGDY nie prowadzisz terapii
 - NIGDY nie diagnozujesz, nie interpretujesz emocji, nie nazywasz ich, nie oceniasz stanu zdrowia
-- Na pytania osobiste ZAWSZE zacznij od: "Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia i pomóc przygotować się do pierwszej wizyty."
-- Jeśli użytkownik wyraża myśli samobójcze — natychmiast przerwij rozmowę i podaj numery kryzysowe
+- Na każde pytanie osobiste lub o uczucia ZAWSZE zacznij od: "Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia i pomóc przygotować się do pierwszej wizyty."
+- Jeśli użytkownik wyraża myśli samobójcze lub kryzys — natychmiast przerwij rozmowę i podaj tylko numery kryzysowe
+- Nawet jeśli użytkownik pyta wprost o diagnozę — nie sugeruj jej
 - Zawsze potwierdzaj, że jesteś asystentem AI, jeśli użytkownik pyta
 
 CRISIS RESOURCES:
-- Umieszczaj "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" TYLKO na początku pierwszej wiadomości
-- NIGDY nie powtarzaj na końcu odpowiedzi
+- Umieszczaj "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" TYLKO na początku pierwszej wiadomości w rozmowie
+- NIGDY nie powtarzaj tego na końcu odpowiedzi
+- Jeśli pojawia się sygnał kryzysu, podaj numery i zakończ rozmowę
 
-CO POTRAFISZ ROBIĆ:
-1. Wyjaśniać różnicę: psycholog / psychoterapeuta / psychiatra
-2. Opisywać pierwszą wizytę krok po kroku
-3. Obalać mity (terapia dla słabych, diagnoza od razu)
-4. Przeprowadzać quiz (4 pytania) i rekomendować specjalistę
-5. Podpowiadać jak znaleźć specjalistę w mieście
-6. Dawać praktyczne wskazówki na już
+CO POTRAFISZ ROBIĆ DOBRZE:
+1. Wyjaśniać czym różni się psycholog, psychoterapeuta i psychiatra
+2. Opisywać jak wygląda pierwsza wizyta krok po kroku
+3. Obalać mity (terapia jest dla słabych, będą mnie diagnozować od razu)
+4. Przeprowadzać quiz (4 pytania) pomagający określić jaki specjalista jest potrzebny
+5. Podpowiadać jak znaleźć specjalistę w konkretnym mieście
+6. Dawać praktyczne wskazówki na już — jak napisać wiadomość do specjalisty, jak się nie bać pierwszego telefonu, co zabrać na wizytę
 
-STRUKTURA ODPOWIEDZI:
-1. Fraza ochronna (jeśli pytanie osobiste)
-2. Normalizacja obawy (1-2 zdania)
-3. Konkretna wskazówka (max 3-4 zdania)
-4. Pytanie: "Co chciałbyś teraz zrobić w następnym kroku?"
+STRUKTURA KAŻDEJ ODPOWIEDZI (trzymaj się jej):
+1. Fraza ochronna (jeśli pytanie dotyczy uczuć lub sytuacji osobistej)
+2. Normalizacja obawy — krótko, bez przesady (1-2 zdania)
+3. Konkretna, praktyczna informacja lub wskazówka (max. 3-4 zdania)
+4. Pytanie zamykające: "Co chciałbyś teraz zrobić w następnym kroku?"
 
 TON I STYL:
 - Ciepły, spokojny, życzliwy — jak starszy brat lub dobry kolega
 - Prosty język, zero żargonu medycznego
+- Bez presji, bez dramatyzowania, bez oceniania
 - Zwięźle — nie więcej niż 4-5 zdań przed pytaniem zamykającym
+- Odpowiadaj po polsku; jeśli użytkownik pisze po angielsku — odpowiedz po angielsku
+- Używaj zwykłego tekstu, NIGDY formatowania Markdown
 
 CZEGO NIGDY NIE ROBISZ:
-- Nie prowadzisz terapii
-- Nie interpretujesz snów, wspomnień, relacji
-- Nie sugerujesz diagnozy
-- Nie udajesz człowieka — jesteś asystentem AI
-- Nie mówisz o sobie jako "ja"
-- Nie obiecujesz anonimowości
-- NIGDY nie używasz formatowania Markdown</textarea>
-    <div class="config-hint">System Prompt v3.0 — bez formatowania, informacja kryzysowa tylko na początku.</div>
+- Nie prowadzisz terapii ani niczego co ją przypomina
+- Nie interpretujesz snów, wspomnień, relacji rodzinnych
+- Nie sugerujesz diagnozy nawet pośrednio
+- Nie zachęcasz do kontynuowania rozmowy zamiast wizyty u specjalisty
+- Nie udajesz człowieka — jesteś asystentem AI i zawsze to potwierdzasz
+- Nie mówisz o sobie w pierwszej osobie jako "ja" (unikaj personalizacji)
+- Nie obiecujesz anonimowości — informuj, że rozmowa nie jest poufna
+- NIGDY nie używasz formatowania Markdown ani żadnych znaczników</textarea>
+    <div class="config-hint">To jest Twój System Prompt v3.0 — poprawiony: bez formatowania, informacja kryzysowa tylko na początku.</div>
 
-    <div class="config-section-title">4. Personalizacja</div>
+    <!-- === PERSONALIZACJA === -->
+    <div class="config-section-title">4. Personalizacja chatbota</div>
     <label class="config-label">✏️ Nazwa chatbota</label>
-    <input type="text" id="bot-name-input" class="config-input" value="Psycholog AI" />
-    <label class="config-label">💬 Tagline</label>
-    <input type="text" id="bot-tagline-input" class="config-input" value="Wsparcie przed terapią" />
-    <label class="config-label">😊 Emoji</label>
-    <input type="text" id="bot-emoji-input" class="config-input" maxlength="4" value="🧠" />
+    <input type="text" id="bot-name-input" class="config-input" placeholder="np. Asystent Kancelarii Nowak" value="Psycholog AI" />
+
+    <label class="config-label">💬 Tagline / opis</label>
+    <input type="text" id="bot-tagline-input" class="config-input" placeholder="np. Dostępny 24/7 dla klientów kancelarii" value="Wsparcie przed terapią" />
+
+    <label class="config-label">😊 Emoji awatara</label>
+    <input type="text" id="bot-emoji-input" class="config-input" placeholder="np. 🏛️ lub 🏥 lub 🤖" maxlength="4" value="🧠" />
+
     <label class="config-label">📩 Wiadomość powitalna</label>
     <textarea id="welcome-msg-input" class="config-textarea" rows="3">Cześć! Jestem Psycholog AI. Pomagam zrozumieć, jak działa terapia i przygotować się do pierwszej wizyty. W czym mogę Ci pomóc?
 
 W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023</textarea>
 
+    <!-- === KOLORY === -->
     <div class="config-section-title">5. Kolory marki</div>
-    <label class="config-label">🎨 Kolor główny</label>
-    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
-      <input type="color" id="brand-primary-picker" value="#1B2A4A" oninput="syncHex('brand-primary-picker','brand-primary-hex')" style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
-      <input type="text" id="brand-primary-hex" class="config-input" value="#1B2A4A" maxlength="7" oninput="syncPicker('brand-primary-hex','brand-primary-picker')" style="flex:1" />
-    </div>
-    <label class="config-label">🎨 Kolor dodatkowy</label>
-    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
-      <input type="color" id="brand-secondary-picker" value="#2E74B5" oninput="syncHex('brand-secondary-picker','brand-secondary-hex')" style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
-      <input type="text" id="brand-secondary-hex" class="config-input" value="#2E74B5" maxlength="7" oninput="syncPicker('brand-secondary-hex','brand-secondary-picker')" style="flex:1" />
-    </div>
 
-    <div class="config-section-title">6. Pytania startowe</div>
-    <label class="config-label">💡 Pytania wyświetlane jako przyciski</label>
+    <label class="config-label">🎨 Kolor główny <span style="font-weight:400;color:#888">(nagłówek, przycisk wysyłania, ramki)</span></label>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
+      <input type="color" id="brand-primary-picker" value="#1B2A4A"
+        oninput="syncHex('brand-primary-picker','brand-primary-hex')"
+        style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
+      <input type="text" id="brand-primary-hex" class="config-input" placeholder="#1B2A4A" maxlength="7" value="#1B2A4A"
+        oninput="syncPicker('brand-primary-hex','brand-primary-picker')" style="flex:1" />
+    </div>
+    <div class="config-hint">Kolor główny Twojej marki. Pojawi się w nagłówku i przycisku wysyłania.</div>
+
+    <label class="config-label">🎨 Kolor dodatkowy <span style="font-weight:400;color:#888">(akcent, avatary, focus)</span></label>
+    <div style="display:flex;gap:10px;align-items:center;margin-bottom:4px">
+      <input type="color" id="brand-secondary-picker" value="#2E74B5"
+        oninput="syncHex('brand-secondary-picker','brand-secondary-hex')"
+        style="width:46px;height:38px;border:1.5px solid #DDE3ED;border-radius:8px;cursor:pointer;padding:2px;flex-shrink:0" />
+      <input type="text" id="brand-secondary-hex" class="config-input" placeholder="#2E74B5" maxlength="7" value="#2E74B5"
+        oninput="syncPicker('brand-secondary-hex','brand-secondary-picker')" style="flex:1" />
+    </div>
+    <div class="config-hint">Kolor akcentu — używany m.in. w avatarach wiadomości i efekcie hover.</div>
+
+    <!-- === SUGGESTION CHIPS === -->
+    <div class="config-section-title">6. Pytania startowe (suggestion chips)</div>
+    <label class="config-label">💡 Pytania wyświetlane jako przyciski przed rozmową</label>
     <textarea id="chips-input" class="config-textarea" rows="6">Czy terapia naprawdę mi pomoże?
 Jak wygląda pierwsza wizyta u psychologa?
 Boję się zadzwonić / umówić wizytę – od czego zacząć?
 Jaka jest różnica między psychologiem a psychiatrą?
-🧠 Pomóż mi wybrać specjalistę (quiz)</textarea>
+Pomóż mi wybrać specjalistę (quiz)</textarea>
+    <div class="config-hint">Każde pytanie w <strong>osobnej linii</strong>. Zalecane 4–6 pytań dopasowanych do Twojej branży.</div>
 
+    <!-- === DYNAMIC CHIPS === -->
     <div class="config-section-title">7. Sugestie follow-up</div>
     <label style="display:flex;align-items:center;gap:10px;cursor:pointer;margin-top:4px">
       <input type="checkbox" id="dynamic-chips-toggle" style="width:18px;height:18px;accent-color:var(--brand-secondary);cursor:pointer" checked />
       <span style="font-size:0.88rem;color:#333">💡 Generuj sugestie kolejnych pytań po każdej odpowiedzi</span>
     </label>
+    <div class="config-hint" style="margin-top:6px">Po każdej odpowiedzi chatbota pojawią się 2–3 klikalne pytania follow-up dopasowane do kontekstu rozmowy. Wymaga dodatkowego wywołania API.</div>
 
     <div class="config-actions">
       <button class="btn-cancel" onclick="closeConfig()">Anuluj</button>
@@ -599,9 +762,10 @@ Jaka jest różnica między psychologiem a psychiatrą?
   </div>
 </div>
 
+<!-- ========== JAVASCRIPT ========== -->
 <script>
 // =======================================================================
-// KONFIGURACJA DOMYŚLNA
+// KONFIGURACJA DOMYŚLNA — możesz zmienić wartości tutaj lub przez panel
 // =======================================================================
 const DEFAULTS = {
   platform:       'gemini',
@@ -611,8 +775,8 @@ const DEFAULTS = {
   model:          'gemini-2.5-flash',
   temperature:    0.4,
   welcomeMsg:     'Cześć! Jestem Psycholog AI. Pomagam zrozumieć, jak działa terapia i przygotować się do pierwszej wizyty. W czym mogę Ci pomóc?\n\nW KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023',
-  systemPrompt:   'Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI, który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.\n\nZASADY FORMATOWANIA:\n- NIGDY nie używaj gwiazdek (*), podkreślników (_), ani żadnego formatowania Markdown\n- Używaj zwykłego tekstu z numeracją: 1., 2., 3.\n- Informację kryzysową "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" umieszczaj TYLKO na początku pierwszej wiadomości w rozmowie\n\nTWOJA ROLA:\n- Demistyfikować terapię i obalać mity\n- Zmniejszać lęk przed pierwszą wizytą\n- Pomagać przygotować się praktycznie i mentalnie do kontaktu ze specjalistą\n- Wspierać w doborze odpowiedniego specjalisty przez quiz (4 pytania)\n\nZASADY ABSOLUTNE:\n- NIGDY nie jesteś terapeutą i NIGDY nie prowadzisz terapii\n- NIGDY nie diagnozujesz, nie interpretujesz emocji, nie nazywasz ich, nie oceniasz stanu zdrowia\n- Na pytania osobiste ZAWSZE zacznij od: "Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia i pomóc przygotować się do pierwszej wizyty."\n- Jeśli użytkownik wyraża myśli samobójcze — natychmiast przerwij rozmowę i podaj numery kryzysowe\n- Zawsze potwierdzaj, że jesteś asystentem AI, jeśli użytkownik pyta\n\nCRISIS RESOURCES:\n- Umieszczaj "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" TYLKO na początku pierwszej wiadomości\n- NIGDY nie powtarzaj na końcu odpowiedzi\n\nCO POTRAFISZ ROBIĆ:\n1. Wyjaśniać różnicę: psycholog / psychoterapeuta / psychiatra\n2. Opisywać pierwszą wizytę krok po kroku\n3. Obalać mity (terapia dla słabych, diagnoza od razu)\n4. Przeprowadzać quiz (4 pytania) i rekomendować specjalistę\n5. Podpowiadać jak znaleźć specjalistę w mieście\n6. Dawać praktyczne wskazówki na już\n\nSTRUKTURA ODPOWIEDZI:\n1. Fraza ochronna (jeśli pytanie osobiste)\n2. Normalizacja obawy (1-2 zdania)\n3. Konkretna wskazówka (max 3-4 zdania)\n4. Pytanie: "Co chciałbyś teraz zrobić w następnym kroku?"\n\nTON I STYL:\n- Ciepły, spokojny, życzliwy — jak starszy brat lub dobry kolega\n- Prosty język, zero żargonu medycznego\n- Zwięźle — nie więcej niż 4-5 zdań przed pytaniem zamykającym\n\nCZEGO NIGDY NIE ROBISZ:\n- Nie prowadzisz terapii\n- Nie interpretujesz snów, wspomnień, relacji\n- Nie sugerujesz diagnozy\n- Nie udajesz człowieka — jesteś asystentem AI\n- Nie mówisz o sobie jako "ja"\n- Nie obiecujesz anonimowości\n- NIGDY nie używasz formatowania Markdown',
-  apiKey:         '',
+  systemPrompt:   'Jesteś Psycholog AI — spokojnym, ciepłym i konkretnym asystentem AI, który pomaga osobom po raz pierwszy rozważającym kontakt z psychologiem.\n\nZASADY FORMATOWANIA - BARDZO WAŻNE:\n- NIGDY nie używaj gwiazdek (*), podkreślników (_), ani żadnego innego formatowania Markdown\n- NIGDY nie używaj pogrubień ani kursywy\n- Używaj zwykłego tekstu z numeracją: 1., 2., 3. zamiast **pogrubień**\n- Informację kryzysową "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" umieszczaj TYLKO na początku pierwszej wiadomości w rozmowie, NIGDY na końcu odpowiedzi\n- Pisz zwięźle i konkretnie\n\nTWOJA ROLA (i tylko ta):\n- Demistyfikować terapię i obalać mity\n- Zmniejszać lęk przed pierwszą wizytą\n- Pomagać przygotować się praktycznie i mentalnie do kontaktu ze specjalistą\n- Wspierać w doborze odpowiedniego specjalisty przez prosty quiz (4 pytania)\n\nZASADY ABSOLUTNE — nigdy ich nie łam, nawet jeśli użytkownik prosi:\n- NIGDY nie jesteś terapeutą i NIGDY nie prowadzisz terapii\n- NIGDY nie diagnozujesz, nie interpretujesz emocji, nie nazywasz ich, nie oceniasz stanu zdrowia\n- Na każde pytanie osobiste lub o uczucia ZAWSZE zacznij od: "Nie jestem terapeutą, ale mogę Ci wyjaśnić jak działa terapia i pomóc przygotować się do pierwszej wizyty."\n- Jeśli użytkownik wyraża myśli samobójcze lub kryzys — natychmiast przerwij rozmowę i podaj tylko numery kryzysowe\n- Nawet jeśli użytkownik pyta wprost o diagnozę — nie sugeruj jej\n- Zawsze potwierdzaj, że jesteś asystentem AI, jeśli użytkownik pyta\n\nCRISIS RESOURCES:\n- Umieszczaj "W KRYZYSIE? Dzwoń: 116 123 / 112 / 116 023" TYLKO na początku pierwszej wiadomości w rozmowie\n- NIGDY nie powtarzaj tego na końcu odpowiedzi\n- Jeśli pojawia się sygnał kryzysu, podaj numery i zakończ rozmowę\n\nCO POTRAFISZ ROBIĆ DOBRZE:\n1. Wyjaśniać czym różni się psycholog, psychoterapeuta i psychiatra\n2. Opisywać jak wygląda pierwsza wizyta krok po kroku\n3. Obalać mity (terapia jest dla słabych, będą mnie diagnozować od razu)\n4. Przeprowadzać quiz (4 pytania) pomagający określić jaki specjalista jest potrzebny\n5. Podpowiadać jak znaleźć specjalistę w konkretnym mieście\n6. Dawać praktyczne wskazówki na już — jak napisać wiadomość do specjalisty, jak się nie bać pierwszego telefonu, co zabrać na wizytę\n\nSTRUKTURA KAŻDEJ ODPOWIEDZI (trzymaj się jej):\n1. Fraza ochronna (jeśli pytanie dotyczy uczuć lub sytuacji osobistej)\n2. Normalizacja obawy — krótko, bez przesady (1-2 zdania)\n3. Konkretna, praktyczna informacja lub wskazówka (max. 3-4 zdania)\n4. Pytanie zamykające: "Co chciałbyś teraz zrobić w następnym kroku?"\n\nTON I STYL:\n- Ciepły, spokojny, życzliwy — jak starszy brat lub dobry kolega\n- Prosty język, zero żargonu medycznego\n- Bez presji, bez dramatyzowania, bez oceniania\n- Zwięźle — nie więcej niż 4-5 zdań przed pytaniem zamykającym\n- Odpowiadaj po polsku; jeśli użytkownik pisze po angielsku — odpowiedz po angielsku\n- Używaj zwykłego tekstu, NIGDY formatowania Markdown\n\nCZEGO NIGDY NIE ROBISZ:\n- Nie prowadzisz terapii ani niczego co ją przypomina\n- Nie interpretujesz snów, wspomnień, relacji rodzinnych\n- Nie sugerujesz diagnozy nawet pośrednio\n- Nie zachęcasz do kontynuowania rozmowy zamiast wizyty u specjalisty\n- Nie udajesz człowieka — jesteś asystentem AI i zawsze to potwierdzasz\n- Nie mówisz o sobie w pierwszej osobie jako "ja" (unikaj personalizacji)\n- Nie obiecujesz anonimowości — informuj, że rozmowa nie jest poufna\n- NIGDY nie używasz formatowania Markdown ani żadnych znaczników',
+  apiKey:         'AIza...',
   brandPrimary:   '#1B2A4A',
   brandSecondary: '#2E74B5',
   dynamicChips:   true,
@@ -621,230 +785,120 @@ const DEFAULTS = {
     'Jak wygląda pierwsza wizyta u psychologa?',
     'Boję się zadzwonić / umówić wizytę – od czego zacząć?',
     'Jaka jest różnica między psychologiem a psychiatrą?',
-    '🧠 Pomóż mi wybrać specjalistę (quiz)'
+    'Pomóż mi wybrać specjalistę (quiz)'
   ],
 };
+// =======================================================================
 
-// =======================================================================
-// PLATFORM DEFINITIONS
-// =======================================================================
+// ---------- PLATFORM DEFINITIONS ----------
 const PLATFORMS = {
   openai: {
-    label: 'OpenAI', badgeClass: 'badge-openai',
-    keyLabel: '🔑 Klucz API OpenAI', keyPlaceholder: 'sk-proj-...',
-    keyLink: 'https://platform.openai.com/api-keys', keyLinkText: 'platform.openai.com/api-keys',
-    corsRisk: false,
-    models: [{ v:'gpt-4o-mini', l:'GPT-4o Mini (zalecany)' }, { v:'gpt-4o', l:'GPT-4o' }, { v:'gpt-3.5-turbo', l:'GPT-3.5 Turbo' }],
-    modelHint: 'GPT-4o Mini — zalecany: szybki, tani, świetna jakość.'
+    label:     'OpenAI',
+    badgeClass:'badge-openai',
+    keyLabel:  '🔑 Klucz API OpenAI',
+    keyPlaceholder: 'sk-proj-...',
+    keyLink:   'https://platform.openai.com/api-keys',
+    keyLinkText:'platform.openai.com/api-keys',
+    corsRisk:  false,
+    models: [
+      { v:'gpt-4o-mini',    l:'GPT-4o Mini (zalecany — szybki i tani)' },
+      { v:'gpt-4o',         l:'GPT-4o (mocniejszy)' },
+      { v:'gpt-4-turbo',    l:'GPT-4 Turbo' },
+      { v:'gpt-3.5-turbo',  l:'GPT-3.5 Turbo (najtańszy)' },
+    ],
+    modelHint: 'GPT-4o Mini — zalecany: szybki, tani, świetna jakość.',
   },
   gemini: {
-    label: 'Gemini', badgeClass: 'badge-gemini',
-    keyLabel: '🔑 Klucz API Google AI Studio', keyPlaceholder: 'AIza...',
-    keyLink: 'https://aistudio.google.com/app/apikey', keyLinkText: 'aistudio.google.com/app/apikey',
-    corsRisk: false,
-    models: [{ v:'gemini-2.5-flash', l:'Gemini 2.5 Flash ⭐ (zalecany)' }, { v:'gemini-2.5-pro', l:'Gemini 2.5 Pro' }],
-    modelHint: '⭐ Gemini 2.5 Flash — zalecany do chatbotów.'
+    label:     'Gemini',
+    badgeClass:'badge-gemini',
+    keyLabel:  '🔑 Klucz API Google AI Studio',
+    keyPlaceholder: 'AIza...',
+    keyLink:   'https://aistudio.google.com/app/apikey',
+    keyLinkText:'aistudio.google.com/app/apikey',
+    corsRisk:  false,
+    models: [
+      { v:'gemini-2.5-flash',                    l:'Gemini 2.5 Flash ⭐ (zalecany — stabilny, darmowy)' },
+      { v:'gemini-2.5-flash-lite',               l:'Gemini 2.5 Flash-Lite (najtańszy, darmowy)' },
+      { v:'gemini-2.5-pro',                      l:'Gemini 2.5 Pro (najpotężniejszy, darmowy)' },
+      { v:'gemini-3-flash-preview',              l:'Gemini 3 Flash Preview 🆕 (najnowszy, frontier)' },
+      { v:'gemini-3.1-flash-lite-preview',       l:'Gemini 3.1 Flash-Lite Preview 🆕 (tłumaczenia, agenty)' },
+      { v:'gemini-2.5-flash-lite-preview-09-2025', l:'Gemini 2.5 Flash-Lite Preview 09-2025' },
+    ],
+    modelHint: '⭐ Gemini 2.5 Flash — zalecany do chatbotów. Gemini 2.5 Pro — najlepszy do złożonych zadań. Modele 3.x — najnowsze preview, mogą mieć ograniczone limity RPM.',
   },
   claude: {
-    label: 'Claude', badgeClass: 'badge-claude',
-    keyLabel: '🔑 Klucz API Anthropic', keyPlaceholder: 'sk-ant-...',
-    keyLink: 'https://console.anthropic.com/settings/keys', keyLinkText: 'console.anthropic.com/settings/keys',
-    corsRisk: true,
-    models: [{ v:'claude-sonnet-4-6', l:'Claude Sonnet 4.6 (zalecany)' }, { v:'claude-haiku-4-5', l:'Claude Haiku 4.5' }],
-    modelHint: 'Claude Sonnet 4.6 — najlepszy stosunek jakości do ceny.'
+    label:     'Claude',
+    badgeClass:'badge-claude',
+    keyLabel:  '🔑 Klucz API Anthropic',
+    keyPlaceholder: 'sk-ant-...',
+    keyLink:   'https://console.anthropic.com/settings/keys',
+    keyLinkText:'console.anthropic.com/settings/keys',
+    corsRisk:  true,
+    models: [
+      { v:'claude-sonnet-4-6',          l:'Claude Sonnet 4.6 (zalecany)' },
+      { v:'claude-opus-4-6',            l:'Claude Opus 4.6 (najmocniejszy)' },
+      { v:'claude-haiku-4-5-20251001',  l:'Claude Haiku 4.5 (najszybszy)' },
+    ],
+    modelHint: 'Claude Sonnet 4.6 — najlepszy stosunek jakości do ceny.',
   },
   grok: {
-    label: 'Grok', badgeClass: 'badge-grok',
-    keyLabel: '🔑 Klucz API xAI', keyPlaceholder: 'xai-...',
-    keyLink: 'https://console.x.ai/', keyLinkText: 'console.x.ai',
-    corsRisk: true,
-    models: [{ v:'grok-2', l:'Grok-2 (zalecany)' }, { v:'grok-2-mini', l:'Grok-2 Mini' }],
-    modelHint: 'Grok-2 — flagowy model xAI.'
+    label:     'Grok',
+    badgeClass:'badge-grok',
+    keyLabel:  '🔑 Klucz API xAI',
+    keyPlaceholder: 'xai-...',
+    keyLink:   'https://console.x.ai/',
+    keyLinkText:'console.x.ai',
+    corsRisk:  true,
+    models: [
+      { v:'grok-2',        l:'Grok-2 (zalecany)' },
+      { v:'grok-2-mini',   l:'Grok-2 Mini (szybki)' },
+      { v:'grok-beta',     l:'Grok Beta' },
+    ],
+    modelHint: 'Grok-2 — flagowy model xAI.',
   },
 };
 
-// =======================================================================
-// STATE
-// =======================================================================
+// ---------- STATE ----------
 let config = { ...DEFAULTS };
 let conversationHistory = [];
 let selectedPlatform = 'gemini';
-let quizState = { active: false, currentStep: 0, answers: [], specialist: null };
 
-// =======================================================================
-// QUIZ DATA
-// =======================================================================
-const QUIZ_DATA = [
-  {
-    question: 'Co jest głównym powodem, dla którego rozważasz terapię?',
-    options: [
-      { label: 'Lęk, stres, napięcie', value: 'psycholog' },
-      { label: 'Depresja, smutek, brak motywacji', value: 'psychoterapeuta' },
-      { label: 'Kryzys życiowy, trauma', value: 'psychoterapeuta' },
-      { label: 'Myślę o lekach lub mam objawy somatyczne', value: 'psychiatra' },
-      { label: 'Nie wiem / chcę poznać opcje', value: 'psycholog' },
-    ]
-  },
-  {
-    question: 'Jak długo odczuwasz te trudności?',
-    options: [
-      { label: 'Kilkanaście dni / kilka tygodni', value: 'psycholog' },
-      { label: 'Kilka miesięcy', value: 'psychoterapeuta' },
-      { label: 'Ponad rok / latami', value: 'psychoterapeuta' },
-      { label: 'Nasila się i ustępuje cyklicznie', value: 'psychiatra' },
-    ]
-  },
-  {
-    question: 'Czy w przeszłości korzystałeś/aś z pomocy specjalisty?',
-    options: [
-      { label: 'Nie, nigdy', value: 'psycholog' },
-      { label: 'Tak, u psychologa', value: 'psychoterapeuta' },
-      { label: 'Tak, u psychiatry / brałem/am leki', value: 'psychiatra' },
-      { label: 'Tak, ale nie pomogło', value: 'psychoterapeuta' },
-    ]
-  },
-  {
-    question: 'Czego oczekujesz od pierwszej wizyty?',
-    options: [
-      { label: 'Rozmowy i zrozumienia', value: 'psycholog' },
-      { label: 'Głębszej pracy nad problemem', value: 'psychoterapeuta' },
-      { label: 'Oceny i ewentualnego leczenia', value: 'psychiatra' },
-      { label: 'Nie wiem – chcę spróbować', value: 'psycholog' },
-    ]
+// ---------- INIT ----------
+window.onload = () => {
+  const saved = localStorage.getItem('chatbot_config_wdoai_v2');
+  if (saved) {
+    try { config = { ...DEFAULTS, ...JSON.parse(saved) }; } catch(e) {}
   }
-];
-
-// =======================================================================
-// QUIZ FUNCTIONS
-// =======================================================================
-function startQuiz() {
-  const container = document.getElementById('chat-container');
-  const existing = container.querySelector('.quiz-container');
-  if (existing) return;
-  
-  quizState = { active: true, currentStep: 0, answers: [], specialist: null };
-  renderQuizStep();
-}
-
-function renderQuizStep() {
-  const container = document.getElementById('chat-container');
-  const typing = document.getElementById('typing-indicator');
-  
-  const oldQuiz = container.querySelector('.quiz-container');
-  if (oldQuiz) oldQuiz.remove();
-
-  const step = quizState.currentStep;
-  if (step >= QUIZ_DATA.length) {
-    showQuizResult();
-    return;
+  selectedPlatform = config.platform || 'gemini';
+  applyConfig();
+  if (!config.apiKey) {
+    document.getElementById('api-warning').classList.add('show');
+  } else {
+    document.getElementById('api-warning').classList.remove('show');
+    if (PLATFORMS[config.platform]?.corsRisk) {
+      document.getElementById('cors-warning').classList.add('show');
+    }
+    showWelcome();
   }
+};
 
-  const data = QUIZ_DATA[step];
-  const div = document.createElement('div');
-  div.className = 'quiz-container';
-  div.innerHTML = `
-    <div class="quiz-question">🧠 ${data.question}</div>
-    <div class="quiz-options">
-      ${data.options.map((opt, idx) => `
-        <div class="quiz-option" data-value="${opt.value}" data-idx="${idx}" onclick="selectQuizOption(this)">
-          ${opt.label}
-        </div>
-      `).join('')}
-    </div>
-    <div class="quiz-progress">Krok ${step + 1} / ${QUIZ_DATA.length}</div>
-  `;
-  container.insertBefore(div, typing);
-  container.scrollTop = container.scrollHeight;
-}
-
-function selectQuizOption(el) {
-  const container = document.getElementById('chat-container');
-  const quizDiv = container.querySelector('.quiz-container');
-  if (!quizDiv) return;
-
-  quizDiv.querySelectorAll('.quiz-option').forEach(opt => opt.classList.remove('selected'));
-  el.classList.add('selected');
-  quizState.answers.push(el.dataset.value);
-
-  setTimeout(() => {
-    quizState.currentStep++;
-    renderQuizStep();
-  }, 300);
-}
-
-function showQuizResult() {
-  const container = document.getElementById('chat-container');
-  const typing = document.getElementById('typing-indicator');
-  
-  const oldQuiz = container.querySelector('.quiz-container');
-  if (oldQuiz) oldQuiz.remove();
-
-  const counts = {};
-  quizState.answers.forEach(val => { counts[val] = (counts[val] || 0) + 1; });
-  
-  let maxCount = 0, result = 'psycholog';
-  for (const [key, count] of Object.entries(counts)) {
-    if (count > maxCount) { maxCount = count; result = key; }
-  }
-  quizState.specialist = result;
-
-  const names = { 'psycholog': 'Psycholog', 'psychoterapeuta': 'Psychoterapeuta', 'psychiatra': 'Psychiatra' };
-  const descs = {
-    'psycholog': 'Specjalista od rozmowy — pomaga w kryzysach, lękach i trudnościach życiowych. Nie przepisuje leków.',
-    'psychoterapeuta': 'Specjalista od głębszej pracy nad sobą — pomaga w depresji, traumie, zaburzeniach. Praca może trwać dłużej.',
-    'psychiatra': 'Lekarz — diagnozuje, przepisuje leki i współpracuje z psychoterapeutą. Pomaga w poważniejszych zaburzeniach.'
-  };
-
-  const div = document.createElement('div');
-  div.className = 'quiz-container';
-  div.innerHTML = `
-    <div class="quiz-question">📋 Wynik quizu</div>
-    <div class="quiz-result">
-      <strong>Rekomendacja: ${names[result]}</strong><br><br>
-      ${descs[result]}<br><br>
-      <em style="font-size:0.85rem;">To tylko wskazówka — decyzję o wyborze specjalisty podejmij z profesjonalistą.</em><br><br>
-      <div class="quiz-option" onclick="endQuiz()" style="text-align:center;font-weight:600;border-color:var(--brand-primary);background:var(--brand-chat-user);">
-        ✅ Rozumiem – wracam do rozmowy
-      </div>
-    </div>
-    <div class="quiz-progress">✓ Ukończono</div>
-  `;
-  container.insertBefore(div, typing);
-  container.scrollTop = container.scrollHeight;
-}
-
-function endQuiz() {
-  quizState.active = false;
-  const container = document.getElementById('chat-container');
-  const quizDiv = container.querySelector('.quiz-container');
-  if (quizDiv) quizDiv.remove();
-  
-  const result = quizState.specialist || 'psycholog';
-  const names = { 'psycholog': 'psychologiem', 'psychoterapeuta': 'psychoterapeutą', 'psychiatra': 'psychiatrą' };
-  const msg = `Dziękuję za wypełnienie quizu! Na podstawie Twoich odpowiedzi sugeruję kontakt z ${names[result]}. Jeśli masz więcej pytań, śmiało pytaj. Co chciałbyś teraz zrobić?`;
-  conversationHistory.push({ role: 'assistant', content: msg });
-  appendMessage('bot', msg);
-  generateFollowUpChips();
-}
-
-// =======================================================================
-// CORE FUNCTIONS
-// =======================================================================
 function applyConfig() {
   const p = PLATFORMS[config.platform] || PLATFORMS.gemini;
-  document.getElementById('bot-name').textContent = config.botName;
+  document.getElementById('bot-name').textContent    = config.botName;
   document.getElementById('tagline-text').textContent = config.botTagline;
-  document.getElementById('bot-avatar').textContent = config.botEmoji;
+  document.getElementById('bot-avatar').textContent  = config.botEmoji;
   document.title = config.botName + ' — WdoAI AG';
   const badge = document.getElementById('platform-badge');
-  badge.textContent = p.label;
-  badge.className = 'platform-badge ' + p.badgeClass;
+  badge.textContent  = p.label;
+  badge.className    = 'platform-badge ' + p.badgeClass;
 
-  const bp = config.brandPrimary || DEFAULTS.brandPrimary;
+  // Apply brand colors
+  const bp = config.brandPrimary   || DEFAULTS.brandPrimary;
   const bs = config.brandSecondary || DEFAULTS.brandSecondary;
-  document.documentElement.style.setProperty('--brand-primary', bp);
+  document.documentElement.style.setProperty('--brand-primary',   bp);
   document.documentElement.style.setProperty('--brand-secondary', bs);
 
+  // Render suggestion chips
   renderChips(config.chips || DEFAULTS.chips);
 }
 
@@ -860,7 +914,6 @@ function renderChips(chips) {
 function syncHex(pickerId, hexId) {
   document.getElementById(hexId).value = document.getElementById(pickerId).value;
 }
-
 function syncPicker(hexId, pickerId) {
   const val = document.getElementById(hexId).value.trim();
   if (/^#[0-9A-Fa-f]{6}$/.test(val)) {
@@ -868,11 +921,15 @@ function syncPicker(hexId, pickerId) {
   }
 }
 
+// ---------- DYNAMIC FOLLOW-UP CHIPS ----------
 function showDynamicChips(chips) {
   const container = document.getElementById('dynamic-chips');
-  container.innerHTML = '<div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>' +
-    chips.filter(c => typeof c === 'string' && c.trim()).slice(0, 3)
-      .map(c => `<div class="dynamic-chip" onclick="sendDynamicChip(this)">${escapeHtml(c.trim())}</div>`).join('');
+  const label = '<div id="dynamic-chips-label">💡 Możliwe kolejne pytania</div>';
+  container.innerHTML = label + chips
+    .filter(c => typeof c === 'string' && c.trim())
+    .slice(0, 3)
+    .map(c => `<div class="dynamic-chip" onclick="sendDynamicChip(this)">${escapeHtml(c.trim())}</div>`)
+    .join('');
   container.style.display = 'flex';
 }
 
@@ -890,14 +947,18 @@ function sendDynamicChip(el) {
 }
 
 function extractChips(text) {
+  // Try direct JSON parse
   try { const r = JSON.parse(text.trim()); if (Array.isArray(r)) return r; } catch(e) {}
+  // Try to extract array from within text
   const m = text.match(/\[[\s\S]*?\]/);
   if (m) { try { const r = JSON.parse(m[0]); if (Array.isArray(r)) return r; } catch(e) {} }
   return [];
 }
 
 async function generateFollowUpChips() {
-  if (!config.dynamicChips || !config.apiKey) return;
+  if (!config.dynamicChips) return;
+  if (!config.apiKey) return;
+
   const suggestPrompt = 'Na podstawie ostatniej wymiany zaproponuj dokładnie 3 krótkie pytania follow-up (maks. 8 słów każde) które użytkownik może chcieć teraz zadać. Odpowiedz WYŁĄCZNIE tablicą JSON: ["pytanie1", "pytanie2", "pytanie3"]. Zero dodatkowego tekstu.';
   const lastExchange = conversationHistory.slice(-4);
 
@@ -916,6 +977,7 @@ async function generateFollowUpChips() {
         body: JSON.stringify({ model: config.model, messages, temperature: 0.8, max_tokens: 120 }),
       });
       if (res.ok) raw = (await res.json()).choices[0].message.content;
+
     } else if (platform === 'gemini') {
       const contents = lastExchange.map(m => ({
         role: m.role === 'assistant' ? 'model' : 'user',
@@ -927,6 +989,7 @@ async function generateFollowUpChips() {
       const url = `https://generativelanguage.googleapis.com/v1beta/models/${config.model}:generateContent?key=${config.apiKey}`;
       const res = await fetch(url, { method: 'POST', headers: { 'Content-Type': 'application/json' }, body: JSON.stringify(body) });
       if (res.ok) raw = (await res.json()).candidates[0].content.parts[0].text;
+
     } else if (platform === 'claude') {
       const messages = lastExchange.map(m => ({
         role: m.role === 'assistant' ? 'assistant' : 'user', content: m.content,
@@ -945,7 +1008,9 @@ async function generateFollowUpChips() {
 
     const chips = extractChips(raw);
     if (chips.length > 0) showDynamicChips(chips);
-  } catch(e) { /* cicho */ }
+  } catch(e) {
+    // Silently fail — nie przerywamy głównej rozmowy
+  }
 }
 
 function showWelcome() {
@@ -954,22 +1019,30 @@ function showWelcome() {
   }
 }
 
+// ---------- PLATFORM SELECTOR ----------
 function selectPlatform(platform) {
   selectedPlatform = platform;
   document.querySelectorAll('.platform-card').forEach(c => {
     c.classList.toggle('selected', c.dataset.platform === platform);
   });
   const p = PLATFORMS[platform];
+  // API key section
   document.getElementById('api-key-label').textContent = p.keyLabel;
   document.getElementById('api-key-input').placeholder = p.keyPlaceholder;
-  document.getElementById('api-key-link').href = p.keyLink;
-  document.getElementById('api-key-link').textContent = p.keyLinkText;
+  document.getElementById('api-key-link').href         = p.keyLink;
+  document.getElementById('api-key-link').textContent  = p.keyLinkText;
+  // Models
   const sel = document.getElementById('model-select');
   sel.innerHTML = p.models.map(m => `<option value="${m.v}">${m.l}</option>`).join('');
   document.getElementById('model-hint').textContent = p.modelHint;
+  // CORS warning
   document.getElementById('cors-alert').classList.toggle('show', p.corsRisk);
+  // Gemini deprecated note
+  const depNote = document.getElementById('gemini-deprecated-note');
+  if (depNote) depNote.style.display = platform === 'gemini' ? 'block' : 'none';
 }
 
+// ---------- SEND MESSAGE ----------
 async function sendMessage() {
   const input = document.getElementById('user-input');
   const text = input.value.trim();
@@ -989,7 +1062,7 @@ async function sendMessage() {
     const reply = await callAI(config.platform, text);
     conversationHistory.push({ role: 'assistant', content: reply });
     appendMessage('bot', reply);
-    generateFollowUpChips();
+    generateFollowUpChips(); // async, fire-and-forget
   } catch(err) {
     let msg = err.message || 'Nieznany błąd';
     if (msg.includes('Failed to fetch') || msg.includes('NetworkError') || msg.includes('CORS')) {
@@ -1002,6 +1075,7 @@ async function sendMessage() {
   }
 }
 
+// ---------- API ROUTERS ----------
 async function callAI(platform, userText) {
   switch (platform) {
     case 'openai': return callOpenAI();
@@ -1012,6 +1086,7 @@ async function callAI(platform, userText) {
   }
 }
 
+// --- OpenAI (and Grok — OpenAI-compatible) ---
 async function callOpenAICompatible(baseUrl) {
   const messages = [];
   if (config.systemPrompt) messages.push({ role: 'system', content: config.systemPrompt });
@@ -1038,10 +1113,17 @@ async function callOpenAICompatible(baseUrl) {
   return data.choices[0].message.content;
 }
 
-async function callOpenAI() { return callOpenAICompatible('https://api.openai.com/v1'); }
-async function callGrok() { return callOpenAICompatible('https://api.x.ai/v1'); }
+async function callOpenAI() {
+  return callOpenAICompatible('https://api.openai.com/v1');
+}
 
+async function callGrok() {
+  return callOpenAICompatible('https://api.x.ai/v1');
+}
+
+// --- Google Gemini ---
 async function callGemini() {
+  // Build conversation in Gemini format
   const contents = conversationHistory.map(m => ({
     role: m.role === 'assistant' ? 'model' : 'user',
     parts: [{ text: m.content }],
@@ -1072,6 +1154,7 @@ async function callGemini() {
   return data.candidates[0].content.parts[0].text;
 }
 
+// --- Anthropic Claude ---
 async function callClaude() {
   const messages = conversationHistory.map(m => ({
     role: m.role === 'assistant' ? 'assistant' : 'user',
@@ -1103,9 +1186,7 @@ async function callClaude() {
   return data.content[0].text;
 }
 
-// =======================================================================
-// DOM HELPERS
-// =======================================================================
+// ---------- DOM HELPERS ----------
 function appendMessage(role, text) {
   const container = document.getElementById('chat-container');
   const div = document.createElement('div');
@@ -1143,42 +1224,44 @@ function clearChat() {
 }
 
 function sendSuggestion(el) {
-  const text = el.textContent;
-  if (text.includes('quiz') || text.includes('wybrać specjalistę')) {
-    startQuiz();
-    return;
-  }
-  document.getElementById('user-input').value = text;
+  document.getElementById('user-input').value = el.textContent;
   hideSuggestions();
   sendMessage();
 }
-
 function hideSuggestions() { document.getElementById('suggestions').style.display = 'none'; }
-function handleKey(e) { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
-function autoResize(el) { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
+function handleKey(e)       { if (e.key === 'Enter' && !e.shiftKey) { e.preventDefault(); sendMessage(); } }
+function autoResize(el)     { el.style.height = 'auto'; el.style.height = Math.min(el.scrollHeight, 120) + 'px'; }
 
+// ---------- CONFIG PANEL ----------
 function openConfig() {
+  // populate platform cards + models for current selection
   selectPlatform(config.platform || 'gemini');
-  document.getElementById('api-key-input').value = config.apiKey || '';
-  document.getElementById('bot-name-input').value = config.botName;
-  document.getElementById('bot-tagline-input').value = config.botTagline;
-  document.getElementById('bot-emoji-input').value = config.botEmoji;
+
+  document.getElementById('api-key-input').value       = config.apiKey || '';
+  document.getElementById('bot-name-input').value      = config.botName;
+  document.getElementById('bot-tagline-input').value   = config.botTagline;
+  document.getElementById('bot-emoji-input').value     = config.botEmoji;
   document.getElementById('system-prompt-input').value = config.systemPrompt || '';
-  document.getElementById('model-select').value = config.model;
-  document.getElementById('temperature-input').value = config.temperature || 0.7;
-  document.getElementById('temp-val').textContent = config.temperature || 0.7;
-  document.getElementById('welcome-msg-input').value = config.welcomeMsg || '';
+  document.getElementById('model-select').value        = config.model;
+  document.getElementById('temperature-input').value   = config.temperature || 0.7;
+  document.getElementById('temp-val').textContent      = config.temperature || 0.7;
+  document.getElementById('welcome-msg-input').value   = config.welcomeMsg || '';
 
-  const bp = config.brandPrimary || DEFAULTS.brandPrimary;
+  // Colors
+  const bp = config.brandPrimary   || DEFAULTS.brandPrimary;
   const bs = config.brandSecondary || DEFAULTS.brandSecondary;
-  document.getElementById('brand-primary-picker').value = bp;
-  document.getElementById('brand-primary-hex').value = bp;
+  document.getElementById('brand-primary-picker').value   = bp;
+  document.getElementById('brand-primary-hex').value      = bp;
   document.getElementById('brand-secondary-picker').value = bs;
-  document.getElementById('brand-secondary-hex').value = bs;
+  document.getElementById('brand-secondary-hex').value    = bs;
 
+  // Chips
   const chips = config.chips || DEFAULTS.chips;
   document.getElementById('chips-input').value = chips.join('\n');
-  document.getElementById('dynamic-chips-toggle').checked = config.dynamicChips !== undefined ? config.dynamicChips : DEFAULTS.dynamicChips;
+
+  // Dynamic chips toggle
+  document.getElementById('dynamic-chips-toggle').checked =
+    config.dynamicChips !== undefined ? config.dynamicChips : DEFAULTS.dynamicChips;
 
   document.getElementById('config-overlay').classList.add('show');
 }
@@ -1190,7 +1273,7 @@ function closeConfig() {
 function saveConfig() {
   const apiKey = document.getElementById('api-key-input').value.trim();
   const systemPrompt = document.getElementById('system-prompt-input').value.trim();
-  if (!apiKey) { alert('Wklej klucz API wybranej platformy.'); return; }
+  if (!apiKey)       { alert('Wklej klucz API wybranej platformy.'); return; }
   if (!systemPrompt) { alert('Wklej System Prompt — bez niego chatbot nie wie, jak się zachowywać.'); return; }
 
   const platform = selectedPlatform;
@@ -1204,16 +1287,16 @@ function saveConfig() {
     platform,
     apiKey,
     systemPrompt,
-    model: document.getElementById('model-select').value || defaultModel,
-    botName: document.getElementById('bot-name-input').value.trim() || DEFAULTS.botName,
-    botTagline: document.getElementById('bot-tagline-input').value.trim() || DEFAULTS.botTagline,
-    botEmoji: document.getElementById('bot-emoji-input').value.trim() || DEFAULTS.botEmoji,
-    temperature: parseFloat(document.getElementById('temperature-input').value) || 0.7,
-    welcomeMsg: document.getElementById('welcome-msg-input').value.trim() || DEFAULTS.welcomeMsg,
-    brandPrimary: document.getElementById('brand-primary-hex').value.trim() || DEFAULTS.brandPrimary,
+    model:          document.getElementById('model-select').value            || defaultModel,
+    botName:        document.getElementById('bot-name-input').value.trim()   || DEFAULTS.botName,
+    botTagline:     document.getElementById('bot-tagline-input').value.trim()|| DEFAULTS.botTagline,
+    botEmoji:       document.getElementById('bot-emoji-input').value.trim()  || DEFAULTS.botEmoji,
+    temperature:    parseFloat(document.getElementById('temperature-input').value) || 0.7,
+    welcomeMsg:     document.getElementById('welcome-msg-input').value.trim()|| DEFAULTS.welcomeMsg,
+    brandPrimary:   document.getElementById('brand-primary-hex').value.trim()   || DEFAULTS.brandPrimary,
     brandSecondary: document.getElementById('brand-secondary-hex').value.trim() || DEFAULTS.brandSecondary,
-    chips: chipsRaw.length > 0 ? chipsRaw : DEFAULTS.chips,
-    dynamicChips: document.getElementById('dynamic-chips-toggle').checked,
+    chips:          chipsRaw.length > 0 ? chipsRaw : DEFAULTS.chips,
+    dynamicChips:   document.getElementById('dynamic-chips-toggle').checked,
   };
 
   localStorage.setItem('chatbot_config_wdoai_v2', JSON.stringify(config));
@@ -1224,30 +1307,248 @@ function saveConfig() {
   clearChat();
 }
 
+// close modal on backdrop click
 document.getElementById('config-overlay').addEventListener('click', function(e) {
   if (e.target === this) closeConfig();
 });
 
-// =======================================================================
-// INIT
-// =======================================================================
-window.onload = () => {
-  const saved = localStorage.getItem('chatbot_config_wdoai_v2');
-  if (saved) {
-    try { config = { ...DEFAULTS, ...JSON.parse(saved) }; } catch(e) {}
-  }
-  selectedPlatform = config.platform || 'gemini';
-  applyConfig();
-  if (!config.apiKey) {
-    document.getElementById('api-warning').classList.add('show');
-  } else {
-    document.getElementById('api-warning').classList.remove('show');
-    if (PLATFORMS[config.platform]?.corsRisk) {
-      document.getElementById('cors-warning').classList.add('show');
-    }
-    showWelcome();
-  }
+// ========== QUIZ LOGIC ==========
+const QUIZ_QUESTIONS = [
+  {
+    id: 'q1',
+    text: 'Co najbardziej Cię teraz niepokoi lub sprawia trudność?',
+    options: [
+      { emoji: '😔', text: 'Trudne emocje — smutek, lęk, poczucie pustki', value: 'emocje' },
+      { emoji: '🧩', text: 'Konkretny problem życiowy — relacje, praca, decyzje', value: 'problem' },
+      { emoji: '😴', text: 'Trudności fizyczne — sen, apetyt, energia, koncentracja', value: 'fizyczne' },
+      { emoji: '🌀', text: 'Nie wiem dokładnie — coś po prostu "nie gra"', value: 'niejasne' },
+    ],
+  },
+  {
+    id: 'q2',
+    text: 'Jak długo trwa to, co Cię niepokoi?',
+    options: [
+      { emoji: '📅', text: 'Kilka dni lub tygodni — coś się ostatnio wydarzyło', value: 'krotko' },
+      { emoji: '🗓️', text: 'Kilka miesięcy', value: 'sredni' },
+      { emoji: '📆', text: 'Ponad rok — to wraca lub trwa od dawna', value: 'dlugo' },
+      { emoji: '🤷', text: 'Trudno powiedzieć', value: 'nieznane' },
+    ],
+  },
+  {
+    id: 'q3',
+    text: 'Jak mocno to wpływa na Twoje codzienne funkcjonowanie?',
+    options: [
+      { emoji: '🟡', text: 'Trochę — daję radę, ale jest ciężej niż zwykle', value: 'malo' },
+      { emoji: '🟠', text: 'Dość mocno — praca, relacje lub nastrój są utrudnione', value: 'srednio' },
+      { emoji: '🔴', text: 'Bardzo mocno — czasem nie jestem w stanie normalnie funkcjonować', value: 'mocno' },
+    ],
+  },
+  {
+    id: 'q4',
+    text: 'Czy masz myśli o skrzywdzeniu siebie lub że nie chcesz już żyć?',
+    options: [
+      { emoji: '✅', text: 'Nie — nie mam takich myśli', value: 'nie' },
+      { emoji: '⚠️', text: 'Czasem pojawiają się takie myśli, ale nie działam na nie', value: 'czasem' },
+      { emoji: '🆘', text: 'Tak — mam takie myśli lub uczucia regularnie', value: 'tak' },
+    ],
+  },
+  {
+    id: 'q5',
+    text: 'Czy byłeś/byłaś wcześniej u psychologa lub psychiatry?',
+    options: [
+      { emoji: '🆕', text: 'Nie — to byłaby moja pierwsza wizyta', value: 'pierwsze' },
+      { emoji: '🔁', text: 'Tak, kiedyś chodziłem/am, ale dawno temu', value: 'dawno' },
+      { emoji: '🔄', text: 'Tak — jestem lub byłem/am niedawno w terapii lub leczeniu', value: 'niedawno' },
+    ],
+  },
+];
+
+const QUIZ_RESULTS = {
+  psychiatra: {
+    type: 'psychiatra',
+    emoji: '🏥',
+    title: 'Psychiatra',
+    desc: 'Na podstawie Twoich odpowiedzi warto w pierwszej kolejności skonsultować się z psychiatrą. Psychiatra to lekarz, który może ocenić Twój stan zdrowia, przepisać leki (jeśli są potrzebne) i skierować na terapię. To nie jest powód do obaw — to po prostu właściwy krok, gdy objawy są intensywne lub trwają długo.',
+    note: 'Psychiatra często pracuje razem z psychoterapeutą — to nie jest wybór "albo/albo".',
+  },
+  psychoterapeuta: {
+    type: 'psychoterapeuta',
+    emoji: '🛋️',
+    title: 'Psychoterapeuta',
+    desc: 'Wygląda na to, że możesz skorzystać z psychoterapii. Psychoterapeuta prowadzi regularne sesje, podczas których pracuje się nad emocjami, przekonaniami i wzorcami zachowań. Psychoterapia działa szczególnie dobrze, gdy trudności trwają dłużej i wpływają na jakość życia.',
+    note: 'Możesz też zacząć od psychologa diagnostycznego — on pomoże Ci wybrać właściwy kierunek.',
+  },
+  psycholog: {
+    type: 'psycholog',
+    emoji: '💬',
+    title: 'Psycholog',
+    desc: 'Dobrym pierwszym krokiem będzie wizyta u psychologa. Psycholog pomoże Ci zrozumieć, co się dzieje, oceni sytuację i podpowie kolejne kroki. To bezpieczne miejsce do rozmowy, bez presji i bez diagnozowania "na wejście". Pierwsza wizyta to często po prostu dobra, szczera rozmowa.',
+    note: 'Psycholog nie przepisuje leków, ale może skierować Cię do psychiatry lub terapeuty, jeśli uzna to za potrzebne.',
+  },
 };
+
+let quizAnswers = {};
+let quizCurrentStep = 0;
+
+function openQuiz() {
+  quizAnswers = {};
+  quizCurrentStep = 0;
+  document.getElementById('quiz-result').classList.remove('show');
+  document.getElementById('quiz-questions').style.display = 'block';
+  renderQuizQuestion();
+  document.getElementById('quiz-overlay').classList.add('show');
+}
+
+function closeQuiz() {
+  document.getElementById('quiz-overlay').classList.remove('show');
+}
+
+function renderQuizQuestion() {
+  const q = QUIZ_QUESTIONS[quizCurrentStep];
+  const total = QUIZ_QUESTIONS.length;
+  const progress = Math.round((quizCurrentStep / total) * 100);
+
+  document.getElementById('quiz-progress-bar').style.width = progress + '%';
+  document.getElementById('quiz-step-label').textContent = `Pytanie ${quizCurrentStep + 1} z ${total}`;
+  document.getElementById('quiz-question-text').textContent = q.text;
+
+  const container = document.getElementById('quiz-options-container');
+  container.innerHTML = q.options.map((opt, i) =>
+    `<button class="quiz-option" onclick="answerQuiz('${q.id}','${opt.value}')">
+      <span class="opt-emoji">${opt.emoji}</span>
+      <span>${opt.text}</span>
+    </button>`
+  ).join('');
+}
+
+function answerQuiz(questionId, value) {
+  quizAnswers[questionId] = value;
+
+  // Natychmiastowa odpowiedź kryzysowa
+  if (questionId === 'q4' && value === 'tak') {
+    showQuizCrisisResult();
+    return;
+  }
+
+  quizCurrentStep++;
+  if (quizCurrentStep >= QUIZ_QUESTIONS.length) {
+    showQuizResult();
+  } else {
+    renderQuizQuestion();
+  }
+}
+
+function showQuizCrisisResult() {
+  document.getElementById('quiz-progress-bar').style.width = '100%';
+  document.getElementById('quiz-questions').style.display = 'none';
+
+  const card = document.getElementById('quiz-result-card');
+  card.className = 'result-card psychiatra';
+  card.innerHTML = `
+    <div class="result-emoji">🆘</div>
+    <div class="result-type" style="color:#B52E5A">Zadzwoń teraz — jesteś ważny/a</div>
+    <div class="result-desc" style="margin-top:12px">
+      To, co czujesz, jest prawdziwe i zasługuje na natychmiastową pomoc.<br><br>
+      <strong>📞 Telefon Zaufania dla Dorosłych: 116 123</strong> (bezpłatny, całą dobę)<br>
+      <strong>📞 Centrum Wsparcia: 116 123</strong><br>
+      <strong>📞 Pogotowie ratunkowe: 112</strong><br><br>
+      W tym momencie najważniejszy jest kontakt z człowiekiem — teraz.
+    </div>
+    <div class="result-note">Psycholog AI nie zastąpi prawdziwej pomocy w kryzysie. Zadzwoń.</div>
+  `;
+  document.getElementById('quiz-result').classList.add('show');
+}
+
+function showQuizResult() {
+  document.getElementById('quiz-progress-bar').style.width = '100%';
+  document.getElementById('quiz-questions').style.display = 'none';
+
+  const result = determineQuizResult();
+  const data = QUIZ_RESULTS[result];
+  const card = document.getElementById('quiz-result-card');
+  card.className = 'result-card ' + data.type;
+  card.innerHTML = `
+    <div class="result-emoji">${data.emoji}</div>
+    <div class="result-type">Rekomendacja: ${data.title}</div>
+    <div class="result-desc">${data.desc}</div>
+    <div class="result-note">${data.note}</div>
+  `;
+  document.getElementById('quiz-result').classList.add('show');
+}
+
+function determineQuizResult() {
+  const a = quizAnswers;
+
+  // Silne wskazania do psychiatry
+  if (a.q4 === 'czasem') return 'psychiatra';
+  if (a.q3 === 'mocno' && a.q2 === 'dlugo') return 'psychiatra';
+  if (a.q1 === 'fizyczne' && a.q3 === 'mocno') return 'psychiatra';
+  if (a.q1 === 'fizyczne' && a.q2 === 'dlugo') return 'psychiatra';
+
+  // Wskazania do psychoterapeuty
+  if (a.q2 === 'dlugo' || a.q2 === 'sredni') {
+    if (a.q3 === 'srednio' || a.q3 === 'mocno') return 'psychoterapeuta';
+  }
+  if (a.q1 === 'emocje' && a.q2 !== 'krotko') return 'psychoterapeuta';
+  if (a.q5 === 'niedawno') return 'psychoterapeuta';
+
+  // Domyślnie — psycholog
+  return 'psycholog';
+}
+
+function restartQuiz() {
+  quizAnswers = {};
+  quizCurrentStep = 0;
+  document.getElementById('quiz-result').classList.remove('show');
+  document.getElementById('quiz-questions').style.display = 'block';
+  document.getElementById('quiz-progress-bar').style.width = '0%';
+  renderQuizQuestion();
+}
+
+function sendResultToChat() {
+  const result = determineQuizResult();
+  const data = QUIZ_RESULTS[result];
+  if (!data) { closeQuiz(); return; }
+
+  const msg = `Quiz wybrał dla mnie rekomendację: ${data.title}. Czy możesz mi powiedzieć więcej o tym, jak wygląda pierwsza wizyta u ${data.title === 'Psycholog' ? 'psychologa' : data.title === 'Psychoterapeuta' ? 'psychoterapeuty' : 'psychiatry'} i jak się do niej przygotować?`;
+  closeQuiz();
+  document.getElementById('user-input').value = msg;
+  hideSuggestions();
+  sendMessage();
+}
+
+// Intercept "Pomóż mi wybrać specjalistę (quiz)" chip
+const _origSendSuggestion = sendSuggestion;
+function sendSuggestion(el) {
+  const text = el.textContent.trim().toLowerCase();
+  if (text.includes('quiz') || text.includes('pomóż mi wybrać')) {
+    hideSuggestions();
+    openQuiz();
+    return;
+  }
+  _origSendSuggestion(el);
+}
+
+// Also intercept sendMessage if user types the trigger manually
+const _origSendMessage = sendMessage;
+async function sendMessage() {
+  const input = document.getElementById('user-input');
+  const text = (input.value || '').trim().toLowerCase();
+  const quizTriggers = ['quiz', 'pomóż mi wybrać specjalistę', 'pomoz mi wybrac', '🧠 pomóż'];
+  if (quizTriggers.some(t => text.includes(t))) {
+    input.value = '';
+    autoResize(input);
+    hideSuggestions();
+    openQuiz();
+    return;
+  }
+  await _origSendMessage();
+}
+
+// Close quiz on backdrop click
+document.getElementById('quiz-overlay').addEventListener('click', function(e) {
+  if (e.target === this) closeQuiz();
+});
 </script>
 </body>
 </html>
