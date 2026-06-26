@@ -886,7 +886,8 @@ function applyConfig() {
   const p = PLATFORMS[config.platform] || PLATFORMS.gemini;
   document.getElementById('bot-name').textContent    = config.botName;
   document.getElementById('tagline-text').textContent = config.botTagline;
-  document.getElementById('bot-avatar').textContent  = config.botEmoji;
+  // logo is handled by img tag — emoji fallback only
+  document.getElementById('bot-avatar-emoji').textContent = config.botEmoji;
   document.title = config.botName + ' — WdoAI AG';
   const badge = document.getElementById('platform-badge');
   badge.textContent  = p.label;
